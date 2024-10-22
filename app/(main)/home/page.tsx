@@ -1,9 +1,9 @@
 import React from 'react'
 import MainLayout from '../layout'
-const BlogPage = () => {
+const HomePage = () => {
   return (
         <div>Welcome</div>
   )
 }
 
-export default BlogPage
+export default HomePage
