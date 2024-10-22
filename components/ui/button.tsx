@@ -12,11 +12,11 @@ const buttonVariants = cva(
         default: "bg-black text-white hover:bg-black/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-[#B88E2F] text-[#B88E2F] hover:bg-[#B88E2F]/10", // Sử dụng outline mới
         secondary: "bg-item text-white hover:bg-item/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        contained: "bg-[#B88E2F] text-white hover:bg-[#B88E2F]/90", // Contained button
       },
       size: {
         default: "h-10 px-4 py-2 text-base",
@@ -31,6 +31,7 @@ const buttonVariants = cva(
     },
   }
 );
+
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
