@@ -17,11 +17,12 @@ const buttonVariants = cva(
                 secondary: "bg-item text-white hover:bg-item/80",
                 ghost: "hover:bg-accent hover:text-accent-foreground",
                 link: "text-primary underline-offset-4 hover:underline",
+                contained: "bg-[#B88E2F] text-white hover:bg-[#B88E2F]/90", // Contained button
             },
             size: {
-                default: "h-10 px-3.5 py-2 text-base",
+                default: "h-10 px-4 py-2 text-base",
                 sm: "h-9 rounded-md px-3 text-sm",
-                lg: "h-11 rounded-md px-4 text-lg",
+                lg: "h-11 rounded-md px-8 text-lg",
                 icon: "h-10 w-10",
             },
         },
