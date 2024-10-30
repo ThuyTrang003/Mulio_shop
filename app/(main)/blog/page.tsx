@@ -1,5 +1,5 @@
 import React from 'react'
-import MainLayout from '../layout'
+import MainLayout from "'
 const BlogPage = () => {
   return (
         <div>Welcome</div>
