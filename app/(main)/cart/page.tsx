@@ -1,6 +1,6 @@
 // ShopPage.tsx
 import React from "react";
-import PageHeader from "@/features/main/page-header";
+import PageHeader from "@/features/main/components/page-header";
 
 const CartPage: React.FC = () => {
   return (
