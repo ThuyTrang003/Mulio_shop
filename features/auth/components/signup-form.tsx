@@ -6,41 +6,60 @@ import { IconInput, RightIcon } from "@/components/icon-input";
 import { CardContent, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { AuthDTO } from "../utils/auth-validate";
+import { useEffect, useState } from "react";
+import { AuthDTO, Signup } from "../utils/auth-validate";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorField } from "@/components/error-field";
-
+import { toast } from "sonner";
+import {useSignup} from "@/hooks/auth-hook/useAuth"
+import { redirect } from "next/navigation";
+import { useAuthStore } from "@/stores/auth";
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showconfirmPass, setShowconfirmPass] = useState(false);
-
+  const {token} = useAuthStore();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthDTO.Signup>({
+  } = useForm<Signup>({
     resolver: zodResolver(AuthDTO.signupSchema),
   });
+  const { mutate: signupMutate, isPending } = useSignup();
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
+    signupMutate(data, {
+      onSuccess: () => {
+          toast("Signup successfully! Please check your mail for confirmation");
+      },
+      onError: () => {
+          toast.error("Signup failed!");
+      },
   });
+  });
+  console.log(token);
+  useEffect(() =>{
+    if (token) {
+      redirect("/")
+    }
+  }, [token]);
   return (
     <form onSubmit={onSubmit}>
       <CardContent className="flex flex-col">
         <div className=" space-y-1">
-          <Label htmlFor="fullName">Name</Label>
-          <Input {...register("fullName")} placeholder="Enter your full name" />
+          <Label htmlFor="username">Name</Label>
+          <Input {...register("username")} placeholder="Enter your full name" disabled={isPending}/>
         </div>
-        {errors.fullName && <ErrorField>{errors.fullName.message}</ErrorField>}
+        {errors.username && <ErrorField>{errors.username.message}</ErrorField>}
 
         <div className=" space-y-1">
           <Label htmlFor="email">Email</Label>
           <Input
             {...register("email")}
-            placeholder="Enter your email address"
+            placeholder="Enter your email address" 
+            disabled={isPending}
           />
         </div>
         {errors.email && <ErrorField>{errors.email.message}</ErrorField>}
@@ -52,6 +71,7 @@ export function SignupForm() {
             placeholder="Enter your password"
             className="pr-10"
             type={showPassword ? "text" : "password"}
+            disabled={isPending}
           >
             <RightIcon>
               <button
@@ -60,7 +80,7 @@ export function SignupForm() {
                 onClick={() => {
                   setShowPassword(!showPassword);
                 }}
-                //disabled={isPending}
+                disabled={isPending}
               >
                 {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
@@ -76,6 +96,7 @@ export function SignupForm() {
             placeholder="Enter your password"
             className="pr-10"
             type={showconfirmPass ? "text" : "password"}
+            disabled={isPending}
           >
             <RightIcon>
               <button
@@ -84,7 +105,7 @@ export function SignupForm() {
                 onClick={() => {
                   setShowconfirmPass(!showconfirmPass);
                 }}
-                //disabled={isPending}
+                disabled={isPending}
               >
                 {showconfirmPass ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
@@ -96,7 +117,7 @@ export function SignupForm() {
         )}
       </CardContent>
       <CardContent className="flex flex-col space-y-4 ">
-        <Button variant="secondary">Sign in</Button>
+        <Button disabled={isPending} variant="secondary">Sign up</Button>
       </CardContent>
     </form>
   );

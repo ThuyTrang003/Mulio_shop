@@ -7,30 +7,54 @@ import { IconInput, RightIcon } from "@/components/icon-input";
 import { CardContent, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { AuthDTO } from "../utils/auth-validate";
+import { useEffect, useState } from "react";
+import { AuthDTO, Signin } from "../utils/auth-validate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorField } from "@/components/error-field";
+import { useSignin } from "@/hooks/auth-hook/useAuth";
+import { toast } from "sonner";
+import { useAuthStore } from "@/stores/auth";
+import { redirect, useRouter } from "next/navigation";
 
 export function SigninForm() {
+  const router = useRouter();
+  const { setToken, token} = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthDTO.Signin>({
+  } = useForm<Signin>({
     resolver: zodResolver(AuthDTO.signinSchema),
   });
+  const { mutate: signinMutate, isPending } = useSignin();
+
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    signinMutate(data, {
+      onSuccess: (data) => {
+        setToken(data.token);
+        toast("Signin successfully!");
+        router.replace("/");
+      },
+      onError: () => {
+          toast.error("Signin failed!");
+      },
+
+      })
   });
+  useEffect(() =>{
+    if (token) {
+      redirect("/")
+    }
+  }, [token]);
+
   return (
     <form onSubmit={onSubmit}>
       <CardContent className="flex flex-col">
         <div className=" space-y-1">
           <Label htmlFor="email">Email</Label>
-          <Input {...register("email")} placeholder="Enter your mail address" />
+          <Input {...register("email")} placeholder="Enter your mail address" disabled={isPending}/>
         </div>
         {errors.email && <ErrorField>{errors.email.message}</ErrorField>}
 
@@ -41,6 +65,7 @@ export function SigninForm() {
             placeholder="Enter your password"
             className="pr-10"
             type={showPassword ? "text" : "password"}
+            disabled={isPending}
           >
             <RightIcon>
               <button
@@ -49,7 +74,7 @@ export function SigninForm() {
                 onClick={() => {
                   setShowPassword(!showPassword);
                 }}
-                //disabled={isPending}
+                disabled={isPending}
               >
                 {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
@@ -63,7 +88,7 @@ export function SigninForm() {
         </CardDescription>
       </CardContent>
       <CardContent className="flex flex-col space-y-4 ">
-        <Button variant="secondary">Sign in</Button>
+        <Button variant="secondary" disabled={isPending}>Sign in</Button>
       </CardContent>
     </form>
   );

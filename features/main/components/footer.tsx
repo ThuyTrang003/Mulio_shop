@@ -2,7 +2,15 @@ import React from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+const footerLinks = [
+  { href: "/", label: "Trang chủ" },
+  { href: "/shop", label: "Sản phẩm" },
+  { href: "/about", label: "Giới thiệu" },
+  { href: "/contact", label: "Liên hệ" },
+  { href: "/payment-methods", label: "Phương thức thanh toán" },
+  { href: "/returns", label: "Trả hàng" },
+  { href: "/privacy-policy", label: "Chính sách bảo mật" },
+];
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-100 py-10">

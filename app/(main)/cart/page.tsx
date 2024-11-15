@@ -2,20 +2,18 @@
 import React from "react";
 import PageHeader from "@/features/main/components/page-header";
 
-const CartPage: React.FC = () => {
+export default function CartPage() {
   return (
     <>
       <PageHeader
         backgroundImage="/banner_shop.png"
-        title="Cart"
+        title="Giỏ hàng"
         breadcrumbItems={[
-          { label: "Home", href: "/home" },
-          { label: "Cart", href: "/cart" },
+          { label: "Trang chủ", href: "/home" },
+          { label: "Giỏ hàng", href: "/cart" },
         ]}
       />
       <div>Welcome to the Shop!</div>
     </>
   );
 };
-
-export default CartPage;

@@ -2,9 +2,13 @@ import { z } from "zod";
 
 // Định nghĩa schema cho User, nhiều thông tin khác
 const UserSchema = z.object({
-  fullName: z.string().min(3, "Username must be at least 3 characters long"),
+  username: z.string().min(3, "Username must be at least 3 characters long")
+  .max(30, "fullname must not be more than 30 characters long"),
+
   email: z.string().email("Invalid email"),
-  phoneNumber: z.string(),
+  phoneNumber: z.string().regex(/^(03|05|07|08|09)\d{8}$/, {
+    message: "Invalid phone number format",
+}),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters long")
@@ -13,38 +17,33 @@ const UserSchema = z.object({
 
 // Định nghĩa AuthDTO với các schema cho đăng nhập và đăng ký
 export class AuthDTO {
-  private static baseSchema = UserSchema.pick({
-    fullName: true,
+  public static signinSchema = UserSchema.pick({
     email: true,
     password: true,
-  }).extend({
-    confirmPassword: z
-      .string()
-      .min(6, "Password must be at least 6 characters long"),
-  });
+});
 
-  public static signinSchema = this.baseSchema.omit({
-    //loại trừ
-    fullName: true,
-    confirmPassword: true,
-  });
+  public static signupSchema = UserSchema.pick({
+        username: true,
+        email: true,
+        password: true,
+    })
+        .extend({
+            confirmPassword: z
+                .string()
+                .min(6, "Password must be at least 6 characters long"),
+        })
+        .refine((data) => data.password === data.confirmPassword, {
+            path: ["confirmPassword"],
+            message: "Passwords must match",
+        });
 
-  public static signupSchema = this.baseSchema.refine(
-    (data) => data.password === data.confirmPassword,
-    {
-      path: ["confirmPassword"],
-      message: "Passwords must match",
-    }
-  );
-
-  public static usernameSchema = this.baseSchema.pick({
-    fullName: true,
+  public static usernameSchema = UserSchema.pick({
+    username: true,
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace AuthDTO {
+
   export type Signin = z.infer<typeof AuthDTO.signinSchema>;
   export type Signup = z.infer<typeof AuthDTO.signupSchema>;
   export type Username = z.infer<typeof AuthDTO.usernameSchema>;
-}
+

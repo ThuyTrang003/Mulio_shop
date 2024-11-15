@@ -14,6 +14,7 @@ const config: Config = {
       colors: {
         background: "#ffffff",
         foreground: "#000000",
+        brown: "#B88E2F",
         item: "#E65F2B",
         card: {
           DEFAULT: "hsl(var(--card))",
