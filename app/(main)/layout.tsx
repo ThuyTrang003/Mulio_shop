@@ -8,7 +8,7 @@ export default function MainLayout({
   return (
     <>
       <Navbar /> {/* Navbar sẽ hiển thị ở tất cả các trang */}
-      <main>{children}</main> {/* Nội dung động của từng trang */}
+      <main className="mt-16">{children}</main> {/* Nội dung động của từng trang */}
       <Footer /> {/* Footer sẽ hiển thị ở tất cả các trang */}
     </>
   );
