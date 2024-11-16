@@ -43,11 +43,8 @@ export function SigninForm() {
 
       })
   });
-  useEffect(() =>{
-    if (token) {
-      redirect("/")
-    }
-  }, [token]);
+  console.log(token)
+
 
   return (
     <form onSubmit={onSubmit}>
