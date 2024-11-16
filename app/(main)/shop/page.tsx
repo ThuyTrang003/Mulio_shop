@@ -9,6 +9,7 @@ const ShopPage: React.FC = () => {
     { id: "2", category: "shirt", image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
     { id: "3", category: "shirt", image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },
     { id: "4", category: "shirt", image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh" },
+    { id: "5", category: "shirt", image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Tím" },
     { id: "1", category: "pants", image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh đậm" },
     { id: "2", category: "pants", image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
     { id: "3", category: "pants", image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },

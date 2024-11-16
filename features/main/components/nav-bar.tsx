@@ -11,6 +11,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { Input } from "@/components/ui/input";
+import CartPopup from "./cart-popup";
 
 const navigation = [
   { name: "Trang chủ", href: "/home" },
@@ -22,7 +23,7 @@ const navigation = [
 const Navbar: React.FC = () => {
   const [active, setActive] = useState("");
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-
+  const [cartPopupOpen, setCartPopupOpen] = useState(false);
   useEffect(() => {
     const currentPath = window.location.pathname;
     setActive(currentPath);
@@ -35,9 +36,12 @@ const Navbar: React.FC = () => {
   const toggleAccountMenu = () => {
     setAccountMenuOpen((prev) => !prev);
   };
+  const toggleCartPopup = () => {
+    setCartPopupOpen((prev) => !prev); // Mở hoặc đóng popup giỏ hàng
+  };
 
   return (
-    <nav className="bg-white">
+    <nav className="bg-white fixed top-0 left-0 w-full z-30 shadow-md">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
@@ -95,7 +99,7 @@ const Navbar: React.FC = () => {
                       <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
                     )}
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/cart"
                     className="flex items-center text-gray-600 hover:text-black relative"
                     onClick={() => handleActive("/cart")}
@@ -104,7 +108,17 @@ const Navbar: React.FC = () => {
                     {active === "/cart" && (
                       <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F] " />
                     )}
-                  </Link>
+                  </Link> */}
+                  <button
+                    onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
+                    className="flex items-center text-gray-600 hover:text-black relative"
+                  >
+                    <IoCartOutline className="h-6 w-6" />
+                    {active === "/cart" && (
+                      <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
+                    )}
+                  </button>
+                  {cartPopupOpen && <CartPopup onClose={toggleCartPopup} />} {/* Hiển thị popup */}
                   <div className="relative">
                     <button
                       onClick={toggleAccountMenu}
