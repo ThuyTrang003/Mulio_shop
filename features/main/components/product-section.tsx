@@ -1,8 +1,11 @@
+"use client"
 import React, { useState } from "react";
 import FeatureProduct from "@/features/main/components/feature-product";
 import { Button } from "@/components/ui/button";
 
 interface Product {
+  id: string;
+  category: string;
   image: string;
   name: string;
   price: string;
@@ -26,9 +29,11 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
     <section className="mx-14 my-10 flex flex-col items-center justify-center gap-4">
       <h2 className="text-2xl font-bold text-black">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {products.slice(0, visibleProducts).map((product, index) => (
+        {products.slice(0, visibleProducts).map((product) => (
           <FeatureProduct
-            key={index}
+            key={product.id}
+            id={product.id}
+            category={product.category}
             image={product.image}
             name={product.name}
             price={product.price}

@@ -4,18 +4,21 @@ import PageHeader from "@/features/main/components/page-header";
 import ProductSection from "@/features/main/components/product-section";
 
 const ShopPage: React.FC = () => {
-  // Sample data for each product
   const featureProducts = [
-    { image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh đậm" },
-    { image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
-    { image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },
-    { image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh" },
-    { image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Đỏ" },
-    { image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Tím" },
-    { image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Vàng" },
-    { image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Xanh lá" },
-    { image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Vàng" },
-    { image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "350.000 VNĐ", description: "Xanh lá" },
+    { id: "1", category: "shirt", image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh đậm" },
+    { id: "2", category: "shirt", image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
+    { id: "3", category: "shirt", image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },
+    { id: "4", category: "shirt", image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh" },
+    { id: "1", category: "pants", image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh đậm" },
+    { id: "2", category: "pants", image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
+    { id: "3", category: "pants", image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },
+    { id: "4", category: "pants", image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh" },
+    { id: "1", category: "accessories", image: "/cardigan/c-1.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh đậm" },
+    { id: "2", category: "accessories", image: "/cardigan/c-2.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xám" },
+    { id: "3", category: "accessories", image: "/cardigan/c-3.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Đen" },
+    { id: "4", category: "accessories", image: "/cardigan/c-4.png", name: "Áo Cardigan", price: "300.000 VNĐ", description: "Xanh" },
+    
+    // Thêm các sản phẩm cho các category "pants" và "accessories" tương tự
   ];
 
   return (
@@ -29,9 +32,9 @@ const ShopPage: React.FC = () => {
         ]}
       />
 
-      <ProductSection title="Áo" products={featureProducts} />
-      <ProductSection title="Quần" products={featureProducts} />
-      <ProductSection title="Phụ kiện" products={featureProducts} />
+      <ProductSection title="Áo" products={featureProducts.filter(p => p.category === "shirt")} />
+      <ProductSection title="Quần" products={featureProducts.filter(p => p.category === "pants")} />
+      <ProductSection title="Phụ kiện" products={featureProducts.filter(p => p.category === "accessories")} />
     </>
   );
 };
