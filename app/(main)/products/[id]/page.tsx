@@ -1,4 +1,4 @@
-import { DetailProduct } from "@/features/product/detail-product/index";
+import { DetailProduct } from "@/features/product/components/detail-product/index";
 
 export default function DetailProductPage() {
     return (

@@ -38,7 +38,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-interface FeatureProductProps {
+interface ProductPreviewProps {
     id: string;
     category: string;
     image: string;
@@ -47,14 +47,14 @@ interface FeatureProductProps {
     description: string;
 }
 
-const FeatureProduct: React.FC<FeatureProductProps> = ({
+export function ProductPreview({
     id,
     category,
     image,
     name,
     price,
     description,
-}) => {
+}: ProductPreviewProps) {
     const router = useRouter();
 
     const handleProductClick = () => {
@@ -91,6 +91,4 @@ const FeatureProduct: React.FC<FeatureProductProps> = ({
             </div>
         </Card>
     );
-};
-
-export default FeatureProduct;
+}

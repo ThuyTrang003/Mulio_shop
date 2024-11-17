@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import PageHeader from "@/features/main/components/page-header";
+import PageHeader from "@/features/layout/page-header";
 
 import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";

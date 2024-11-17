@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import PageHeader from "@/features/main/components/page-header";
-import ProductSection from "@/features/main/components/product-section";
+import PageHeader from "@/features/layout/page-header";
+import ProductSection from "@/features/product/components/products-section/product-section";
 
 const ShopPage: React.FC = () => {
     const featureProducts = [
