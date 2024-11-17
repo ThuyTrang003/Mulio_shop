@@ -1,8 +1,6 @@
 import MainLayout from "../layout";
 import React from "react";
 
-const BlogPage = () => {
+export default function BlogPage() {
     return <div>Welcome</div>;
-};
-
-export default BlogPage;
+}
