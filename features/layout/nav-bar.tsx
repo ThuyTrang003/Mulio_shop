@@ -1,5 +1,6 @@
 "use client";
 
+import { CartDropdown } from "../cart/components/cart-dropdown";
 import CartPopup from "../cart/components/cart-popup";
 import {
     NavigationMenu,
@@ -126,18 +127,20 @@ const Navbar: React.FC = () => {
                       <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F] " />
                     )}
                   </Link> */}
-                                    <button
-                                        onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
-                                        className="relative flex items-center text-gray-600 hover:text-black"
-                                    >
-                                        <IoCartOutline className="h-6 w-6" />
-                                        {active === "/cart" && (
-                                            <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
-                                        )}
-                                    </button>
-                                    {cartPopupOpen && (
+                                    <CartDropdown>
+                                        <button
+                                            onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
+                                            className="relative flex items-center text-gray-600 hover:text-black"
+                                        >
+                                            <IoCartOutline className="h-6 w-6" />
+                                            {active === "/cart" && (
+                                                <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
+                                            )}
+                                        </button>
+                                    </CartDropdown>
+                                    {/* {cartPopupOpen && (
                                         <CartPopup onClose={toggleCartPopup} />
-                                    )}{" "}
+                                    )}{" "} */}
                                     {/* Hiển thị popup */}
                                     <div className="relative">
                                         <button

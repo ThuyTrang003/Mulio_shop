@@ -1,12 +1,12 @@
 import axios from "@/apis/api-constant";
 
-export const logout = async () => {
-    const url = "/api/auth/logout";
+export const getUserDetail = async () => {
+    const url = "/api/users";
     try {
         const response = await axios.get(url);
         return response.data;
     } catch (error) {
-        console.error("Logout failed:", error);
+        console.error("Get user detail failed:", error);
         throw error;
     }
 };
