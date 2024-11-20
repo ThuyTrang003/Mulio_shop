@@ -10,6 +10,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .text-brown {
+    color: theme("colors.brown");
+  }
 }
 
 @layer base {
@@ -73,6 +76,6 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-brown;
   }
 }
