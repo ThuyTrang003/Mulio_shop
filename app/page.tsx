@@ -10,18 +10,16 @@ import { useAuthStore } from "@/stores/auth";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-    const { setToken, token, resetToken } = useAuthStore();
+    const { setToken, token, resetAuth } = useAuthStore();
     const router = useRouter();
     const { mutate: logout } = useLogout();
     // const {data: logout} = useLogout();
     const handleLogout = () => {
-        console.log("handle");
-        console.log({ token });
         logout(undefined, {
             onSuccess: () => {
                 toast.success("Logout successfully!");
                 router.push("/");
-                resetToken();
+                resetAuth();
             },
             onError: () => {
                 toast("Logout failed!");
