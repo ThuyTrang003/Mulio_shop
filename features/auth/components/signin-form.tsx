@@ -35,7 +35,7 @@ export function SigninForm() {
       onSuccess: (data) => {
         setToken(data.token);
         toast("Signin successfully!");
-        router.replace("/");
+        router.replace("/home");
       },
       onError: () => {
           toast.error("Signin failed!");
@@ -43,11 +43,8 @@ export function SigninForm() {
 
       })
   });
-  useEffect(() =>{
-    if (token) {
-      redirect("/")
-    }
-  }, [token]);
+  console.log(token)
+
 
   return (
     <form onSubmit={onSubmit}>

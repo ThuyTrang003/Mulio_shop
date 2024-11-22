@@ -1,6 +1,6 @@
 import MainLayout from "../layout";
 import React from "react";
 
-export default function AccountPage() {
+export default function WishListPage() {
     return <div>Welcome</div>;
 }

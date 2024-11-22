@@ -40,11 +40,7 @@ export function SignupForm() {
   });
   });
   console.log(token);
-  useEffect(() =>{
-    if (token) {
-      redirect("/")
-    }
-  }, [token]);
+
   return (
     <form onSubmit={onSubmit}>
       <CardContent className="flex flex-col">
