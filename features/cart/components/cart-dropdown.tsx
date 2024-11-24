@@ -85,7 +85,7 @@ export function CartDropdown({ children }: CartDropdownProps) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 pl-4" align="end">
-                <h2 className="mb-4 mt-2 font-semibold">cartData.</h2>
+                <h2 className="mb-4 mt-2 font-semibold">Cart</h2>
                 <div className="flex flex-col gap-4">
                     <ScrollArea
                         className={cn(

@@ -4,7 +4,7 @@ export const getCart = async () => {
     const url = `/api/users/cart`;
     try {
         const response = await axios.get(url);
-        return response.data.data.data;
+        return response.data.data;
     } catch (error) {
         console.error("Get cart failed:", error);
         throw error;
