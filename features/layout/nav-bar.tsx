@@ -1,5 +1,6 @@
 "use client";
 
+import { CartDropdown } from "../cart/components/cart-dropdown";
 import CartPopup from "../cart/components/cart-popup";
 import {
     NavigationMenu,
@@ -17,18 +18,20 @@ import { MdAccountCircle } from "react-icons/md";
 import { useAuthStore } from "@/stores/auth";
 import { useLoadUser } from "@/hooks/auth-hook/useAuth";
 import { Input } from "@/components/ui/input";
-
+import AccountDropdown from "../account/account-dropdown";
 const navigation = [
     { name: "Trang chủ", href: "/home" },
     { name: "Sản phẩm", href: "/shop" },
-    { name: "Về chúng tôi", href: "/blog" },
+    { name: "Về chúng tôi", href: "/about-us" },
     { name: "Liên hệ", href: "/contact" },
 ];
 
 const Navbar: React.FC = () => {
-    const { setToken, token, resetToken } = useAuthStore();
+    // const { setToken, token, resetToken } = useAuthStore();
+    const { setToken, accessToken } = useAuthStore();
+
     const { data } = useLoadUser();
-    console.log("token", token);
+    console.log("token", accessToken);
     console.log("setToken", setToken);
     const [active, setActive] = useState("");
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -133,18 +136,20 @@ const Navbar: React.FC = () => {
                       <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F] " />
                     )}
                   </Link> */}
-                                    <button
-                                        onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
-                                        className="relative flex items-center text-black hover:text-[#B88E2F]"
-                                    >
-                                        <IoCartOutline className="h-6 w-6 pr-1" />
-                                        {active === "/cart" && (
-                                            <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
-                                        )}
-                                    </button>
-                                    {cartPopupOpen && (
+                                    <CartDropdown>
+                                        <button
+                                            onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
+                                            className="relative flex items-center text-gray-600 hover:text-black"
+                                        >
+                                            <IoCartOutline className="h-6 w-6" />
+                                            {active === "/cart" && (
+                                                <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
+                                            )}
+                                        </button>
+                                    </CartDropdown>
+                                    {/* {cartPopupOpen && (
                                         <CartPopup onClose={toggleCartPopup} />
-                                    )}{" "}
+                                    )}{" "} */}
                                     {/* Hiển thị popup */}
                                     {/* <div className="relative">
                                         <button
@@ -205,7 +210,7 @@ const Navbar: React.FC = () => {
                                         </button>
                                     </div> */}
                                     <div className="relative">
-                                        {token ? ( // Kiểm tra token
+                                        {accessToken ? ( // Kiểm tra token
                                             <button
                                                 onClick={toggleAccountMenu} // Mở hoặc đóng popup
                                                 className="relative flex h-8 w-8 items-center justify-center rounded-full bg-[#B88E2F] text-white"
@@ -244,7 +249,7 @@ const Navbar: React.FC = () => {
                                                 </Link>
                                                 <button
                                                     onClick={() => {
-                                                        resetToken(); // Đặt lại token
+                                                        // resetToken(); // Đặt lại token
                                                         setAccountMenuOpen(
                                                             false,
                                                         );
