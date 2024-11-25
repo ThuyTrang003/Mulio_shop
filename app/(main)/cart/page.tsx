@@ -1,6 +1,7 @@
 // ShopPage.tsx
 import React from "react";
 
+import { Cart } from "@/features/cart/components/cart-page";
 import PageHeader from "@/features/layout/page-header";
 
 const CartPage: React.FC = () => {
@@ -14,7 +15,9 @@ const CartPage: React.FC = () => {
                     { label: "Cart", href: "/cart" },
                 ]}
             />
-            <div>Welcome to the Shop!</div>
+            <div className="px-20">
+                <Cart />
+            </div>
         </>
     );
 };

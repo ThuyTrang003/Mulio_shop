@@ -3,14 +3,12 @@
 import { AuthDTO, Signup } from "../utils/auth-validate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { useSignup } from "@/hooks/auth-hook/useAuth";
-
-import { useAuthStore } from "@/stores/auth";
 
 import { ErrorField } from "@/components/error-field";
 import { IconInput, RightIcon } from "@/components/icon-input";
@@ -30,17 +28,19 @@ export function SignupForm() {
         resolver: zodResolver(AuthDTO.signupSchema),
     });
     const { mutate: signupMutate, isPending } = useSignup();
-
+    const router = useRouter();
     const onSubmit = handleSubmit((data) => {
         console.log(data);
         signupMutate(data, {
-            onSuccess: () => {
+            onSuccess: (resp) => {
                 toast(
                     "Signup successfully! Please check your mail for confirmation",
                 );
+                router.replace(`/verify-email?token=${resp.token}`);
             },
-            onError: () => {
-                toast.error("Signup failed!");
+            onError: (resp) => {
+                console.log(resp);
+                toast.error("Signup failed: " + resp.message);
             },
         });
     });
