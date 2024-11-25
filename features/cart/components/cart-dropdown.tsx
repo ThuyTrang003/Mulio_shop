@@ -25,6 +25,8 @@ export const data = {
     products: [
         {
             productId: "1",
+            skuBase: "1",
+            skuCode: "string",
             productName: "Áo len dệt",
             price: 300000,
             description: " description",
@@ -37,6 +39,8 @@ export const data = {
         },
         {
             productId: "2",
+            skuBase: "2",
+            skuCode: "string",
             productName: "Áo len",
             price: 300000,
             description: " description",
@@ -49,6 +53,8 @@ export const data = {
         },
         {
             productId: "2",
+            skuBase: "3",
+            skuCode: "string",
             productName: "Áo len",
             price: 300000,
             description: " description",
@@ -61,6 +67,8 @@ export const data = {
         },
         {
             productId: "2",
+            skuBase: "4",
+            skuCode: "string",
             productName: "Áo len",
             price: 300000,
             description: " description",
