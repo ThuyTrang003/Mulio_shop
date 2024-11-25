@@ -2,26 +2,50 @@
 
 import React, { useState } from "react";
 
+import { usePostPassword } from "@/hooks/user-hook/use-password";
+
+import { useAuthStore } from "@/stores/auth";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function ChangePasswordForm() {
     const [formData, setFormData] = useState({
+        currentPassword: "",
         newPassword: "",
         confirmPassword: "",
     });
+
+    const { token } = useAuthStore();
+    const { mutateAsync: postPassword } = usePostPassword();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (formData.newPassword === formData.confirmPassword) {
-            console.log("Password updated:", formData.newPassword);
-            // Call your API to update the password
+            try {
+                await postPassword({
+                    oldPassword: formData.currentPassword, // Updated key
+                    newPassword: formData.newPassword,
+                    accessToken: token?.accessToken, // Pass valid token
+                });
+                console.log("Password updated successfully.");
+
+                // Reset form data
+                setFormData({
+                    currentPassword: "",
+                    newPassword: "",
+                    confirmPassword: "",
+                });
+            } catch (error) {
+                console.error("Error updating password:", error);
+            }
         } else {
             console.error("Passwords do not match!");
         }
@@ -29,6 +53,19 @@ export default function ChangePasswordForm() {
 
     return (
         <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
+            <div>
+                <Label htmlFor="currentPassword" className="mb-2 block">
+                    Mật khẩu hiện tại
+                </Label>
+                <Input
+                    id="currentPassword"
+                    name="currentPassword"
+                    type="password"
+                    value={formData.currentPassword}
+                    onChange={handleChange}
+                    placeholder="Nhập mật khẩu hiện tại"
+                />
+            </div>
             <div>
                 <Label htmlFor="newPassword" className="mb-2 block">
                     Mật khẩu mới

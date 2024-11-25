@@ -1,62 +1,158 @@
-// import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-// import { useAuthStore } from "@/stores/auth";
+import { useGetInfo, useUpdateInfo } from "@/hooks/user-hook/use-profile";
 
-// import ProductSection, {
-//     Product,
-// } from "@/features/product/components/products-section/product-section";
+import { useAuthStore } from "@/stores/auth";
 
-// const ShopPage: React.FC = () => {
-//     const { setToken, token } = useAuthStore();
-//     console.log("getToken", token);
-//     const accessToken = token.accessToken;
-//     console.log("accessToken", accessToken);
-//     const [products, setProducts] = useState<Product[]>([]);
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState<string | null>(null);
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+// Import custom Input component
+import { Label } from "@/components/ui/label";
 
-//     useEffect(() => {
-//         if (!accessToken) return;  // Exit if no token is present
+// Import custom Label component
 
-//         const fetchProducts = async () => {
-//             try {
-//                 const response = await fetch("http://localhost:8080/api/products/by-product-type/Áo thun", {
-//                     method: "GET",
-//                     headers: {
-//                         Authorization: `Bearer ${accessToken}`,
-//                         "Content-Type": "application/json",
-//                     },
-//                 });
+export default function UserProfileForm() {
+    const router = useRouter();
+    const { setToken, token } = useAuthStore();
+    const { data: userInfo, isError, error, isLoading } = useGetInfo();
+    const { mutate: updateMutate, isPending } = useUpdateInfo();
+    const [editing, setEditing] = useState(false);
+    const [userData, setUserData] = useState({
+        fullName: "",
+        phone: "",
+        email: "", // Thêm trường email
+        address: "",
+    });
 
-//                 if (!response.ok) {
-//                     throw new Error("Failed to fetch products");
-//                 }
+    useEffect(() => {
+        if (userInfo) {
+            setUserData({
+                fullName: userInfo.fullName || "",
+                phone: userInfo.phone || "",
+                email: userInfo.email || "", // Lấy email từ userInfo
+                address: userInfo.address || "",
+            });
+        }
+    }, [userInfo]);
 
-//                 const data = await response.json();
-//                 setProducts(data.data.map(product => ({
-//                     productId: product.productId,
-//                     productName: product.productName,/-strong/-heart:>:o:-((:-h price: product.price,
-//                     // etc...
-//                 })));
-//             } catch (err) {
-//                 setError(err.message);
-//             } finally {
-//                 setLoading(false);
-//             }
-//         };
+    const handleSave = () => {
+        updateMutate(userData);
+        setEditing(false);
+    };
 
-//         fetchProducts();
-//     }, [accessToken]);  // Fetch when accessToken changes
+    if (isError) {
+        console.error(error);
+        return <p>Đã xảy ra lỗi khi tải thông tin người dùng.</p>;
+    }
 
-//     if (loading) {
-//         return <p>Đang tải dữ liệu...</p>;
-//     }
-
-//     if (error) {
-//         return <p>Lỗi: {error}</p>;
-//     }
-
-//     return <ProductSection title="Áo thun" products={products} />;
-// };
-
-// export default ShopPage;​
+    return (
+        <div className="mx-auto max-w-md space-y-4">
+            <h2 className="mb-6 text-xl font-semibold">Thông tin người dùng</h2>
+            {isLoading ? (
+                <p>Đang tải...</p>
+            ) : (
+                <div className="flex flex-col space-y-4">
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="fullName"
+                            className="text-sm font-medium"
+                        >
+                            Họ và Tên:
+                        </Label>
+                        <Input
+                            id="fullName"
+                            type="text"
+                            value={userData.fullName}
+                            onChange={(e) =>
+                                setUserData({
+                                    ...userData,
+                                    fullName: e.target.value,
+                                })
+                            }
+                            customSize="default"
+                            disabled={!editing}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <Label htmlFor="phone" className="text-sm font-medium">
+                            Số điện thoại:
+                        </Label>
+                        <Input
+                            id="phone"
+                            type="text"
+                            value={userData.phone}
+                            onChange={(e) =>
+                                setUserData({
+                                    ...userData,
+                                    phone: e.target.value,
+                                })
+                            }
+                            customSize="default"
+                            disabled={!editing}
+                        />
+                    </div>
+                    {/* Thêm trường Email */}
+                    <div className="flex flex-col">
+                        <Label htmlFor="email" className="text-sm font-medium">
+                            Email:
+                        </Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            value={userData.email}
+                            onChange={(e) =>
+                                setUserData({
+                                    ...userData,
+                                    email: e.target.value,
+                                })
+                            }
+                            customSize="default"
+                            disabled={!editing}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <Label
+                            htmlFor="address"
+                            className="text-sm font-medium"
+                        >
+                            Địa chỉ:
+                        </Label>
+                        <Input
+                            id="address"
+                            type="text"
+                            value={userData.address}
+                            onChange={(e) =>
+                                setUserData({
+                                    ...userData,
+                                    address: e.target.value,
+                                })
+                            }
+                            customSize="default"
+                            disabled={!editing}
+                        />
+                    </div>
+                </div>
+            )}
+            <div className="mt-6 flex gap-4">
+                <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => setEditing(!editing)}
+                >
+                    {editing ? "Hủy chỉnh sửa" : "Chỉnh sửa"}
+                </Button>
+                {editing && (
+                    <Button
+                        className="w-full"
+                        variant="secondary"
+                        onClick={handleSave}
+                        disabled={isPending}
+                    >
+                        {isPending ? "Đang lưu..." : "Lưu"}
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
+}
