@@ -40,8 +40,8 @@ export function ProductImages({ images }: ProductImagesProps) {
                                     <Image
                                         src={src}
                                         alt={`Product thumbnail ${index + 1}`}
-                                        width={200}
-                                        height={200}
+                                        width={2000}
+                                        height={2000}
                                         className="h-full w-full object-cover"
                                     />
                                 </button>

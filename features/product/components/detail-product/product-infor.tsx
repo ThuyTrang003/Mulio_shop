@@ -1,21 +1,24 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { useGetProductByColorSize } from "@/hooks/product-hook/useProduct";
+
 import { moneyFormatter } from "@/utils/money-formatter";
 
 import StarRatingDisplay from "@/components/star-rating-display";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface ProductInforProps {
     productData: {
-        _id: string;
-        code: string;
+        productId: string;
+        skuBase: string;
+        skuCode: string;
         productName: string;
         price: number;
         description: string;
         sizes: string[];
         colors: string[];
-        amount: number;
         status: string;
         productType: string;
         images: string[];
@@ -26,7 +29,11 @@ export function ProductInfor({ productData }: ProductInforProps) {
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState(productData.sizes[0]);
     const [selectedColor, setSelectedColor] = useState(productData.colors[0]);
-
+    const { data: productByColorSize } = useGetProductByColorSize({
+        color: selectedColor,
+        size: selectedSize,
+        skuBase: productData.skuBase,
+    });
     return (
         <div className="space-y-6">
             <div>
@@ -38,7 +45,7 @@ export function ProductInfor({ productData }: ProductInforProps) {
                 </p>
             </div>
 
-            <StarRatingDisplay rating={4.2} />
+            <StarRatingDisplay rating={productData.averageRating} />
 
             <p className="text-muted-foreground">{productData.description}</p>
 
@@ -85,7 +92,9 @@ export function ProductInfor({ productData }: ProductInforProps) {
                         ))}
                     </div>
                 </div>
-
+                {productByColorSize && (
+                    <p>Số lượng: {productByColorSize.amount} </p>
+                )}
                 <div className="flex items-center gap-4">
                     <div className="flex items-center rounded-md border">
                         <Button
@@ -104,12 +113,14 @@ export function ProductInfor({ productData }: ProductInforProps) {
                                     Math.max(1, parseInt(e.target.value) || 1),
                                 )
                             }
+                            disabled
                             className="w-16 border-0 text-center focus:ring-0"
                         />
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setQuantity(quantity + 1)}
+                            disabled={quantity >= productByColorSize?.amount}
                         >
                             +
                         </Button>
@@ -126,7 +137,7 @@ export function ProductInfor({ productData }: ProductInforProps) {
             <div className="space-y-2 border-t pt-4">
                 <p className="text-sm">
                     <span className="font-medium">Code:</span>{" "}
-                    {productData.code}
+                    {productData.skuBase}
                 </p>
                 <p className="text-sm">
                     <span className="font-medium">Category:</span>{" "}
