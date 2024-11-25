@@ -325,7 +325,7 @@ import { useAuthStore } from "@/stores/auth";
 import ProductSection, { Product } from "@/features/product/components/products-section/product-section";
 
 const ShopPage: React.FC = () => {
-    const { accessToken } = useAuthStore();
+    const { token } = useAuthStore();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -351,8 +351,10 @@ const ShopPage: React.FC = () => {
                     price: product.price,
                     color: product.color,
                     description: product.description,
-                    images: product.images,
+                    // images: product.images,
+                    images: Array.isArray(product.images) ? product.images : [product.images],
                     productType: product.productType,
+                    size: product.size,
                 })));
             } catch (err) {
                 setError(err.message);
@@ -376,12 +378,12 @@ const ShopPage: React.FC = () => {
         <>
             <div className=" padding-10 gap-10">
             <ProductSection
-                title="Áo thun"
-                products={products.filter((p) => p.productType === "Áo thun")}
+                title="Áo"
+                products={products.filter((p) => p.productType === "Áo" && p.size === "S")}
             />
             <ProductSection
                 title="Quần"
-                products={products.filter((p) => p.productType === "Quần")}
+                products={products.filter((p) => p.productType === "Quần" && p.size === "S")}
             />
             <ProductSection
                 title="Phụ kiện"

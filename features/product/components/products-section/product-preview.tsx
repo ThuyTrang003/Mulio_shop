@@ -41,8 +41,19 @@ export function ProductPreview({
         >
             <div className="grid gap-4 p-4">
                 <div className="aspect-[4/5] w-full overflow-hidden rounded-xl">
-                    <Image
+                    {/* <Image
                         src={images}
+                        alt={productName}
+                        width="400"
+                        height="500"
+                        className="aspect-[4/5] w-full object-cover"
+                    /> */}
+                    <Image
+                        src={
+                            Array.isArray(images) && images.length > 0
+                                ? images[0]
+                                : "/placeholder.jpg"
+                        } // Hiển thị hình ảnh đầu tiên hoặc ảnh placeholder
                         alt={productName}
                         width="400"
                         height="500"
@@ -57,7 +68,7 @@ export function ProductPreview({
                         <h4 className="text-sm text-[#898989] md:text-base">
                             {color}
                         </h4>
-                        <p className="text-sm font-semibold md:text-base text-[#B88E2F]">
+                        <p className="text-sm font-semibold text-[#B88E2F] md:text-base">
                             {price.toLocaleString("vi-VN", {
                                 style: "currency",
                                 currency: "VND",
@@ -73,7 +84,7 @@ export function ProductPreview({
                             onMouseLeave={() => setIsHovered(false)}
                         >
                             {isHovered ? (
-                                <FaHeart className="text-[#B88E2F] hover:text-[#B88E2F]"/>
+                                <FaHeart className="text-[#B88E2F] hover:text-[#B88E2F]" />
                             ) : (
                                 <FaRegHeart className="text-[#B88E2F] hover:text-[#B88E2F]" />
                             )}

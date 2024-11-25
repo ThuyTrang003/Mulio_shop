@@ -21,10 +21,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 interface CartDropdownProps {
     children: React.ReactNode;
 }
-const data = {
+export const data = {
     products: [
         {
-            productId: 1,
+            productId: "1",
             productName: "Áo len dệt",
             price: 300000,
             description: " description",
@@ -33,10 +33,10 @@ const data = {
             amount: 2,
             productType: "category",
             image: "/product.jpg",
-            totalPrice: 100000,
+            totalPrice: 600000,
         },
         {
-            productId: 2,
+            productId: "2",
             productName: "Áo len",
             price: 300000,
             description: " description",
@@ -48,7 +48,7 @@ const data = {
             totalPrice: 100000,
         },
         {
-            productId: 2,
+            productId: "2",
             productName: "Áo len",
             price: 300000,
             description: " description",
@@ -60,7 +60,7 @@ const data = {
             totalPrice: 100000,
         },
         {
-            productId: 2,
+            productId: "2",
             productName: "Áo len",
             price: 300000,
             description: " description",
@@ -85,7 +85,7 @@ export function CartDropdown({ children }: CartDropdownProps) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 pl-4" align="end">
-                <h2 className="mb-4 mt-2 font-semibold">cartData.</h2>
+                <h2 className="mb-4 mt-2 font-semibold">Cart</h2>
                 <div className="flex flex-col gap-4">
                     <ScrollArea
                         className={cn(
