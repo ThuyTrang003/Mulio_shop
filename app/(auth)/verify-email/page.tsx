@@ -40,7 +40,6 @@ export default function VerifyEmailPage() {
                         <Alert variant="default">
                             <CheckCircle className="h-4 w-4" />
                             <AlertTitle>Email Confirmed</AlertTitle>
-                            <AlertDescription>{data}</AlertDescription>
                         </Alert>
                     )}
                     {isError && (
@@ -60,10 +59,10 @@ export default function VerifyEmailPage() {
                     {isSuccess ? (
                         <Button
                             onClick={() => {
-                                router.replace("/home");
+                                router.replace("/signin");
                             }}
                         >
-                            Go to Home
+                            Signin to continue
                         </Button>
                     ) : (
                         <Button

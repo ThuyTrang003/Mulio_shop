@@ -36,7 +36,6 @@ export function SignupForm() {
                 toast(
                     "Signup successfully! Please check your mail for confirmation",
                 );
-                router.replace(`/verify-email?token=${resp.token}`);
             },
             onError: (resp) => {
                 console.log(resp);
