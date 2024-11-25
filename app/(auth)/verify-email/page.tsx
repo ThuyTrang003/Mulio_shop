@@ -25,7 +25,7 @@ export default function VerifyEmailPage() {
         </Suspense>
     );
 }
-export function VerifyEmailContent() {
+function VerifyEmailContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
