@@ -6,6 +6,8 @@ interface AuthStore {
         accessToken: string | null;
         refreshToken: string | null;
     };
+    userId: string | null;
+    setUserId: (userId: string) => void;
     setToken: (token: { accessToken: string; refreshToken: string }) => void;
     refreshToken: (token: { refreshToken: string }) => void;
     resetAuth: () => void;
@@ -17,6 +19,8 @@ export const useAuthStore = create(
                 accessToken: null,
                 refreshToken: null,
             },
+            userId: null,
+            setUserId: (userId) => set({ userId: userId }),
             refreshToken: () => {
                 const { token } = get();
                 if (token.refreshToken) {

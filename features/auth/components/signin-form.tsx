@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useSignin } from "@/hooks/auth-hook/useAuth";
 
 import { useAuthStore } from "@/stores/auth";
+import useCartStore from "@/stores/cart-store";
 
 import { ErrorField } from "@/components/error-field";
 import { IconInput, RightIcon } from "@/components/icon-input";
@@ -21,7 +22,8 @@ import { Label } from "@/components/ui/label";
 
 export function SigninForm() {
     const router = useRouter();
-    const { setToken, token } = useAuthStore();
+    const { setToken, token, setUserId } = useAuthStore();
+    const { setCartId } = useCartStore();
     const [showPassword, setShowPassword] = useState(false);
     const {
         register,
@@ -35,8 +37,10 @@ export function SigninForm() {
     const onSubmit = handleSubmit((data) => {
         signinMutate(data, {
             onSuccess: (data) => {
-                setToken(data);
-
+                console.log(data);
+                setToken(data.token);
+                setCartId(data.cartId);
+                setUserId(data.userId);
                 toast("Signin successfully!");
                 router.replace("/");
             },

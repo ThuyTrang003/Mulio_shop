@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 
 import PageHeader from "@/features/layout/page-header";
 
+import Select from "@/components/select";
 import { Input } from "@/components/ui/input";
-import Select from "@/components/ui/select";
 
 interface Location {
     code: number;
