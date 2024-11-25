@@ -355,6 +355,7 @@ const ShopPage: React.FC = () => {
                     images: Array.isArray(product.images) ? product.images : [product.images],
                     productType: product.productType,
                     size: product.size,
+                    skuBase: product.skuBase,
                 })));
             } catch (err) {
                 setError(err.message);

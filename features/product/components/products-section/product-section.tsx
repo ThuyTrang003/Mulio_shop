@@ -76,6 +76,8 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
         setVisibleProducts(products.length);
     };
 
+    console.log(products);
+
     return (
         <section className="mx-14 my-10 flex flex-col items-center justify-center gap-4">
             <h2 className="pt-10 text-2xl font-bold text-black">{title}</h2>
@@ -90,7 +92,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
                         price={product.price}
                         description={product.description}
                         color={product.color}
+                        skuBase={product.skuBase}
                     />
+                    
                 ))}
             </div>
             {visibleProducts < products.length && (

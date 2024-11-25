@@ -16,6 +16,7 @@ interface ProductPreviewProps {
     productName: string;
     price: number;
     description: string;
+    skuBase: string;
 }
 
 export function ProductPreview({
@@ -26,12 +27,13 @@ export function ProductPreview({
     productName,
     price,
     description,
+    skuBase,
 }: ProductPreviewProps) {
     const [isHovered, setIsHovered] = useState(false);
     const router = useRouter();
 
     const handleProductClick = () => {
-        router.push(`/products/${productId}`);
+        router.push(`/products/${skuBase}`);
     };
 
     return (
@@ -76,9 +78,9 @@ export function ProductPreview({
                         </p>
                         {/* <p className="text-sm text-gray-600 md:text-base">{description}</p> */}
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 justify-end">
                         <Button
-                            className="rounded-[50%] bg-transparent hover:bg-transparent"
+                            className="rounded-[50%] bg-[#FCF8F3] hover:bg-[#FCF8F3]"
                             size="icon"
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
@@ -90,18 +92,18 @@ export function ProductPreview({
                             )}
                         </Button>
 
-                        <Button
+                        {/* <Button
                             className="rounded-[50%] border-black bg-[#FCF8F3] hover:bg-[#B88E2F]"
                             size="icon"
                         >
                             <FaCartPlus className="text-[#B88E2F] hover:text-[#FCF8F3]" />
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
                 {/* <Button size="sm">
                     <FaCartPlus />
-                </Button>
-                <Button size="sm">Thêm vào giỏ hàng</Button> */}
+                </Button> */}
+                <Button variant="outline" size="sm">Mua hàng</Button>
             </div>
         </Card>
     );
