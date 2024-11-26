@@ -1,13 +1,17 @@
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
+import { useAddProductToCart } from "@/hooks/cart-hook/use-cart";
 import { useGetProductByColorSize } from "@/hooks/product-hook/useProduct";
+
+import useCartStore from "@/stores/cart-store";
 
 import { moneyFormatter } from "@/utils/money-formatter";
 
 import StarRatingDisplay from "@/components/star-rating-display";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface ProductInforProps {
     productData: {
@@ -34,6 +38,33 @@ export function ProductInfor({ productData }: ProductInforProps) {
         size: selectedSize,
         skuBase: productData.skuBase,
     });
+    const { cartId } = useCartStore();
+    const { mutate: addProductToCart, isPending: pendingAddProductToCart } =
+        useAddProductToCart();
+    const queryClient = useQueryClient();
+
+    const handleAddProductToCart = () => {
+        addProductToCart(
+            {
+                cartId: cartId,
+                productId: productByColorSize.productId,
+                amount: quantity,
+            },
+            {
+                onSuccess: () => {
+                    toast(
+                        `Item ${productByColorSize.productName} added successfully`,
+                    );
+                    queryClient.invalidateQueries({
+                        queryKey: ["getCart"],
+                    });
+                },
+                onError: () => {
+                    toast.error("Add item failed!");
+                },
+            },
+        );
+    };
     return (
         <div className="space-y-6">
             <div>
@@ -128,6 +159,8 @@ export function ProductInfor({ productData }: ProductInforProps) {
                     <Button
                         variant="outline"
                         className="flex-1 border border-black"
+                        onClick={handleAddProductToCart}
+                        disabled={pendingAddProductToCart}
                     >
                         Thêm vào giỏ hàng
                     </Button>
