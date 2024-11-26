@@ -28,10 +28,11 @@ const navigation = [
 
 const Navbar: React.FC = () => {
     // const { setToken, token, resetToken } = useAuthStore();
-    const { setToken, accessToken } = useAuthStore();
+    const { setToken, token } = useAuthStore();
 
     const { data } = useLoadUser();
-    console.log("token", accessToken);
+    console.log("token", token);
+    const accessToken = token.accessToken;
     console.log("setToken", setToken);
     const [active, setActive] = useState("");
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
