@@ -1,7 +1,6 @@
 "use client";
 
 import { CartDropdown } from "../cart/components/cart-dropdown";
-import CartPopup from "../cart/components/cart-popup";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -15,10 +14,12 @@ import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 
-import { useAuthStore } from "@/stores/auth";
 import { useLoadUser } from "@/hooks/auth-hook/useAuth";
+
+import { useAuthStore } from "@/stores/auth";
+
 import { Input } from "@/components/ui/input";
-import AccountDropdown from "../account/account-dropdown";
+
 const navigation = [
     { name: "Trang chủ", href: "/home" },
     { name: "Sản phẩm", href: "/shop" },
@@ -36,7 +37,6 @@ const Navbar: React.FC = () => {
     console.log("setToken", setToken);
     const [active, setActive] = useState("");
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-    const [cartPopupOpen, setCartPopupOpen] = useState(false);
     useEffect(() => {
         const currentPath = window.location.pathname;
         setActive(currentPath);
@@ -48,9 +48,6 @@ const Navbar: React.FC = () => {
 
     const toggleAccountMenu = () => {
         setAccountMenuOpen((prev) => !prev);
-    };
-    const toggleCartPopup = () => {
-        setCartPopupOpen((prev) => !prev); // Mở hoặc đóng popup giỏ hàng
     };
 
     return (
@@ -138,20 +135,13 @@ const Navbar: React.FC = () => {
                     )}
                   </Link> */}
                                     <CartDropdown>
-                                        <button
-                                            onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
-                                            className="relative flex items-center text-gray-600 hover:text-black"
-                                        >
+                                        <button className="relative flex items-center text-gray-600 hover:text-black">
                                             <IoCartOutline className="h-6 w-6" />
                                             {active === "/cart" && (
                                                 <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
                                             )}
                                         </button>
                                     </CartDropdown>
-                                    {/* {cartPopupOpen && (
-                                        <CartPopup onClose={toggleCartPopup} />
-                                    )}{" "} */}
-                                    {/* Hiển thị popup */}
                                     {/* <div className="relative">
                                         <button
                                             onClick={toggleAccountMenu}
