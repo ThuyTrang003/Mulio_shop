@@ -30,10 +30,10 @@ interface ProductSectionProps {
 }
 
 const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
-    const [visibleProducts, setVisibleProducts] = useState(4);
+    const [visibleProducts, setVisibleProducts] = useState(8);
 
     const handleShowMore = () => {
-        setVisibleProducts(products.length);
+        setVisibleProducts(prevVisible => prevVisible + 8); // Mỗi lần bấm Xem thêm sẽ hiển thị thêm 8 sản phẩm
     };
 
     console.log(products);
