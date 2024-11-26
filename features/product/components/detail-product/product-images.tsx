@@ -42,7 +42,7 @@ export function ProductImages({ images }: ProductImagesProps) {
                                         alt={`Product thumbnail ${index + 1}`}
                                         width={2000}
                                         height={2000}
-                                        className="h-full w-full object-cover"
+                                        className="h-auto w-full object-cover"
                                     />
                                 </button>
                             </CarouselItem>
@@ -57,8 +57,8 @@ export function ProductImages({ images }: ProductImagesProps) {
                 <Image
                     src={images[selectedImage]}
                     alt="Product main image"
-                    width={300}
-                    height={300}
+                    width={2000}
+                    height={2000}
                     className="h-auto w-full rounded-lg"
                 />
             </div>

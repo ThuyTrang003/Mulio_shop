@@ -51,7 +51,7 @@ export default function Payment({ totalPrice, totalNumber }: PaymentProps) {
                 </div>
 
                 {/* Checkout Button */}
-                <Button className="w-full bg-item/70 text-white hover:bg-item">
+                <Button className="w-full bg-item/80 text-white hover:bg-item">
                     TIẾP TỤC THANH TOÁN
                 </Button>
             </CardContent>
