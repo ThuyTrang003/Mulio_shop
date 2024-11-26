@@ -14,8 +14,6 @@ import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 
-import { useLoadUser } from "@/hooks/auth-hook/useAuth";
-
 import { useAuthStore } from "@/stores/auth";
 
 import { Input } from "@/components/ui/input";
@@ -31,7 +29,6 @@ const Navbar: React.FC = () => {
     // const { setToken, token, resetToken } = useAuthStore();
     const { setToken, token } = useAuthStore();
 
-    const { data } = useLoadUser();
     console.log("token", token);
     const accessToken = token.accessToken;
     console.log("setToken", setToken);

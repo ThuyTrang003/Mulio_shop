@@ -5,7 +5,7 @@ import PageHeader from "@/features/main/components/page-header";
 import { Cart } from "@/features/cart/components/cart-page";
 // import PageHeader from "@/features/layout/page-header";
 
-const CartPage: React.FC = () => {
+export default function CartPage (){
     return (
         <>
             <PageHeader

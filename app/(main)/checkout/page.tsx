@@ -1,10 +1,14 @@
 "use client";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 import { useGetCart } from "@/hooks/cart-hook/use-cart";
 
+import { useAuthStore } from "@/stores/auth";
+
 import { CartItem } from "@/types/cart-item-type";
+
 import { moneyFormatter } from "@/utils/money-formatter";
 
 import PageHeader from "@/features/layout/page-header";
@@ -18,7 +22,18 @@ interface Location {
     name: string;
 }
 
+interface Customer {
+    data: {
+        fullName: string;
+        phone: string;
+        address: string;
+    };
+}
+
 export default function CheckoutPage() {
+    const token = useAuthStore();
+    const accessToken = token.token.accessToken;
+    console.log("accessToken", accessToken);
     const [provinces, setProvinces] = useState<Location[]>([]);
     const [districts, setDistricts] = useState<Location[]>([]);
     const [wards, setWards] = useState<Location[]>([]);
@@ -26,9 +41,50 @@ export default function CheckoutPage() {
     const [selectedDistrict, setSelectedDistrict] = useState<string>("");
     const [selectedWard, setSelectedWard] = useState<string>("");
     const [paymentMethod, setPaymentMethod] = useState<string>("");
-
+    const [customer, setCustomer] = useState<Customer | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     // Get cart data
     const { data: cartData } = useGetCart();
+    console.log("cartData", cartData);
+    useEffect(() => {
+        fetch("http://localhost:8080/api/users/customer-info", {
+            method: "GET", // Ensure the method is GET
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`, // Add the access token here
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    // Handle unauthorized or other errors
+                    if (response.status === 401) {
+                        console.error(
+                            "Unauthorized access - please login again.",
+                        );
+                        // Optionally, redirect to login page
+                        // window.location.href = '/login';
+                    } else {
+                        console.error(
+                            "Failed to fetch customer data:",
+                            response.status,
+                        );
+                    }
+                    return Promise.reject("Unauthorized access");
+                }
+                console.log("response", response);
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Customer Data:", data);
+                setCustomer(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching customer data:", error);
+                setLoading(false);
+            });
+    }, [accessToken]);
+    console.log("customer", customer?.data.address);
 
     useEffect(() => {
         fetch("https://provinces.open-api.vn/api/p/")
@@ -94,6 +150,7 @@ export default function CheckoutPage() {
                                 type="text"
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập họ tên"
+                                value={customer?.data.fullName || ""}
                             />
                         </div>
                         <div>
@@ -104,6 +161,7 @@ export default function CheckoutPage() {
                                 type="text"
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập số điện thoại"
+                                value={customer?.data.phone || ""}
                             />
                         </div>
                         <div>
@@ -114,6 +172,7 @@ export default function CheckoutPage() {
                                 type="text"
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập địa chỉ"
+                                value={customer?.data.address || ""}
                             />
                         </div>
                         <div>

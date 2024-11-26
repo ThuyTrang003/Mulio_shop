@@ -2,7 +2,7 @@
 
 import { logout } from "../../apis/auth-api/logout";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import {signup, signin, isVerify, loadUser} from "../../apis/auth-api/auth";
+import {signup, signin, isVerify} from "../../apis/auth-api/auth";
 import { useAuthStore } from "@/stores/auth";
 export const useSignin = () => {
     return useMutation({ mutationFn: signin });
@@ -22,12 +22,3 @@ export const useIsVerify = (params) => {
     });
 };
 
-
-export const useLoadUser = () => {
-    const { token } = useAuthStore();
-    return useQuery({
-        queryKey: ["loadUser", token],
-        queryFn: () => loadUser(token),
-        enabled: !!token, // Chỉ chạy nếu token tồn tại
-    });
-};
