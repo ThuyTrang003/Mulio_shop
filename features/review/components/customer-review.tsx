@@ -2,9 +2,9 @@ import Image from "next/image";
 
 import { useGetReviewsByBase } from "@/hooks/review-hook/useReview";
 
-import { ReviewType } from "@/types/review-type";
-
 import { dateFormatter } from "@/utils/date-formatter";
+
+import { ReviewType } from "@/features/review/types/review-type";
 
 import StarRatingDisplay from "@/components/star-rating-display";
 import { Card } from "@/components/ui/card";
@@ -56,22 +56,24 @@ export function CustomerReview({ skuBase }: CustomerReviewProps) {
                                     </p>
                                 </div>
                                 {/* Review Images */}
-                                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                                    {review.images.map((image, index) => (
-                                        <div
-                                            key={index}
-                                            className="relative aspect-square"
-                                        >
-                                            <Image
-                                                src={image}
-                                                alt={`Review image ${index + 1}`}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="rounded-md"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
+                                {review.images.length > 0 && (
+                                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                                        {review.images.map((image, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative aspect-square"
+                                            >
+                                                <Image
+                                                    src={image}
+                                                    alt={`Review image ${index + 1}`}
+                                                    layout="fill"
+                                                    objectFit="cover"
+                                                    className="rounded-md"
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Card>

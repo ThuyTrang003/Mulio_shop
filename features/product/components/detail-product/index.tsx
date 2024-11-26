@@ -7,7 +7,7 @@ import { useState } from "react";
 
 import { useGetProductByBase } from "@/hooks/product-hook/useProduct";
 
-import { CustomerReview } from "@/features/review/customer-review";
+import { CustomerReview } from "@/features/review/components/customer-review";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

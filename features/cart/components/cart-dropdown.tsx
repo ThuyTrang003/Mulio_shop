@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 
 import { useGetCart } from "@/hooks/cart-hook/use-cart";
 
-import { CartItem } from "@/types/cart-item-type";
-
 import { moneyFormatter } from "@/utils/money-formatter";
+
+import { CartItem } from "@/features/cart/types/cart-item-type";
 
 import { Button } from "@/components/ui/button";
 import {
