@@ -11,8 +11,11 @@ import { CustomerReview } from "@/features/review/customer-review";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export function DetailProduct() {
-    const { data: productByBase } = useGetProductByBase("KNITSWEATER");
+interface DetailProductProps {
+    id: string | string[] | undefined; // The product id
+}
+export function DetailProduct({ id }: DetailProductProps) {
+    const { data: productByBase } = useGetProductByBase(id);
     return (
         <>
             {productByBase && (
