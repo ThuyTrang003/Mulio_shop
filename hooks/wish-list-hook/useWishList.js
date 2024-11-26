@@ -1,9 +1,21 @@
-import { getWishList } from "../../apis/wish-list-api/wish-list";
+import {
+    addProductToWishList,
+    deleteProductToWishList,
+    getWishList,
+} from "../../apis/wish-list-api/wish-list";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useGetCart = (userId) => {
+export const useGetWishList = () => {
     return useQuery({
-        queryKey: ["getWishList", userId],
-        queryFn: () => getWishList(userId),
+        queryKey: ["getWishList"],
+        queryFn: getWishList,
     });
+};
+
+export const useAddProductToWishList = () => {
+    return useMutation({ mutationFn: addProductToWishList });
+};
+
+export const useDeleteProductToWishList = () => {
+    return useMutation({ mutationFn: deleteProductToWishList });
 };
