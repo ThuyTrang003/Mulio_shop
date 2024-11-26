@@ -148,7 +148,7 @@ const CartPopup: React.FC<CartPopupProps> = ({ onClose }) => {
                         className="bg-color-none w-full rounded-full border-[1px] border-[#B88E2F] px-4 py-2 text-sm font-semibold text-black hover:bg-[#B88E2F] hover:text-[white]"
                         onClick={handleOpenCheckout}
                     >
-                        Checkout
+                        Tiến hành thanh toán
                     </Button>
                 </div>
             </div>

@@ -5,10 +5,11 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
 
+import { useAuthStore } from "@/stores/auth";
+
+import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useAuthStore } from "@/stores/auth";
-import { Modal } from "@/components/modal";
 
 interface ProductPreviewProps {
     productId: string;
@@ -80,10 +81,7 @@ export function ProductPreview({
                             {color}
                         </h4>
                         <p className="text-sm font-semibold text-[#B88E2F] md:text-base">
-                            {price.toLocaleString("vi-VN", {
-                                style: "currency",
-                                currency: "VND",
-                            })}
+                            {price.toLocaleString("vi-VN")} VND
                         </p>
                     </div>
                     <div className="flex flex-col justify-end gap-2">
@@ -117,13 +115,25 @@ export function ProductPreview({
                             Thêm vào danh sách yêu thích
                         </h3>
                         <p className="mt-2 text-sm text-gray-600">
-                            <span className="text-red-500">!</span> Vui lòng đăng nhập để sử dụng tính năng danh sách yêu thích hoặc đăng ký tài khoản mới.
+                            <span className="text-red-500">!</span> Vui lòng
+                            đăng nhập để sử dụng tính năng danh sách yêu thích
+                            hoặc đăng ký tài khoản mới.
                         </p>
-                        <div className="flex justify-center gap-4 mt-4">
-                            <Button variant="contained" onClick={() => console.log("Đi tới trang đăng nhập")}>
+                        <div className="mt-4 flex justify-center gap-4">
+                            <Button
+                                variant="contained"
+                                onClick={() =>
+                                    console.log("Đi tới trang đăng nhập")
+                                }
+                            >
                                 Đăng nhập
                             </Button>
-                            <Button variant="secondary" onClick={() => console.log("Đi tới trang đăng ký")}>
+                            <Button
+                                variant="secondary"
+                                onClick={() =>
+                                    console.log("Đi tới trang đăng ký")
+                                }
+                            >
                                 Đăng ký
                             </Button>
                         </div>
