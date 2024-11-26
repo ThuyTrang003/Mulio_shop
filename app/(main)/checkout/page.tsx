@@ -1,8 +1,14 @@
 "use client";
-
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
+import { useGetCart } from "@/hooks/cart-hook/use-cart";
+
+import { CartItem } from "@/types/cart-item-type";
+import { moneyFormatter } from "@/utils/money-formatter";
+
 import PageHeader from "@/features/layout/page-header";
+import { Product } from "@/features/product/components/products-section/product-section";
 
 import Select from "@/components/select";
 import { Input } from "@/components/ui/input";
@@ -16,14 +22,14 @@ export default function CheckoutPage() {
     const [provinces, setProvinces] = useState<Location[]>([]);
     const [districts, setDistricts] = useState<Location[]>([]);
     const [wards, setWards] = useState<Location[]>([]);
-
     const [selectedProvince, setSelectedProvince] = useState<string>("");
     const [selectedDistrict, setSelectedDistrict] = useState<string>("");
     const [selectedWard, setSelectedWard] = useState<string>("");
-
     const [paymentMethod, setPaymentMethod] = useState<string>("");
 
-    // Fetch provinces on mount
+    // Get cart data
+    const { data: cartData } = useGetCart();
+
     useEffect(() => {
         fetch("https://provinces.open-api.vn/api/p/")
             .then((response) => response.json())
@@ -33,7 +39,6 @@ export default function CheckoutPage() {
             );
     }, []);
 
-    // Fetch districts when a province is selected
     useEffect(() => {
         if (selectedProvince) {
             fetch(
@@ -49,7 +54,6 @@ export default function CheckoutPage() {
         }
     }, [selectedProvince]);
 
-    // Fetch wards when a district is selected
     useEffect(() => {
         if (selectedDistrict) {
             fetch(
@@ -186,22 +190,70 @@ export default function CheckoutPage() {
                                 </thead>
                                 <tbody>
                                     {/* Render dynamic product rows */}
-                                    <tr>
-                                        <td className="px-4 py-2">Áo thun</td>
-                                        <td className="px-4 py-2">2</td>
-                                        <td className="px-4 py-2">Đen</td>
-                                        <td className="px-4 py-2">L</td>
-                                        <td className="px-4 py-2">
-                                            400,000 VND
-                                        </td>
-                                    </tr>
+                                    {cartData &&
+                                    cartData.products.length > 0 ? (
+                                        cartData.products.map(
+                                            (item: CartItem) => (
+                                                <tr key={item.productId}>
+                                                    <td className="px-4 py-2">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="relative h-16 w-16 overflow-hidden rounded-md">
+                                                                <Image
+                                                                    src={
+                                                                        item
+                                                                            .image[0]
+                                                                    }
+                                                                    alt={
+                                                                        item.productName
+                                                                    }
+                                                                    fill
+                                                                    className="object-cover"
+                                                                />
+                                                            </div>
+                                                            <span>
+                                                                {
+                                                                    item.productName
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {item.amount}
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {item.color}
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {item.size}
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {moneyFormatter(
+                                                            item.price,
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ),
+                                        )
+                                    ) : (
+                                        <tr>
+                                            <td
+                                                colSpan={5}
+                                                className="px-4 py-2 text-center"
+                                            >
+                                                Không có sản phẩm trong giỏ
+                                                hàng.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
                         <div className="flex justify-between font-semibold">
                             <span>Tổng cộng:</span>
                             <span className="text-lg text-[#B88E2F]">
-                                400,000 VND
+                                {cartData && cartData.totalPrice
+                                    ? moneyFormatter(cartData.totalPrice)
+                                    : "0 VND"}
                             </span>
                         </div>
                         <hr className="my-4 border-gray-300" />
