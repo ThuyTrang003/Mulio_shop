@@ -7,10 +7,9 @@ import { useGetCart } from "@/hooks/cart-hook/use-cart";
 
 import { useAuthStore } from "@/stores/auth";
 
-import { CartItem } from "@/types/cart-item-type";
-
 import { moneyFormatter } from "@/utils/money-formatter";
 
+import { CartItem } from "@/features/cart/types/cart-item-type";
 import PageHeader from "@/features/layout/page-header";
 import { Product } from "@/features/product/components/products-section/product-section";
 
@@ -136,14 +135,14 @@ export default function CheckoutPage() {
             console.error("Cart ID is missing.");
             return;
         }
-    
+
         const checkoutEndpoint = `http://localhost:8080/api/cart/${cartData.cartId}/checkout`;
-    
+
         // Chuyển đổi mã thành tên
         const cityName = findNameByCode(provinces, selectedProvince);
         const districtName = findNameByCode(districts, selectedDistrict);
         const wardName = findNameByCode(wards, selectedWard);
-    
+
         const paymentData = {
             fullName: customer?.data.fullName || "",
             phone: customer?.data.phone || "",
@@ -151,9 +150,12 @@ export default function CheckoutPage() {
             city: cityName,
             district: districtName,
             ward: wardName,
-            paymentMethod: paymentMethod === "Thanh toán khi nhận hàng" ? "Thanh toán khi nhận hàng" : "Chuyển khoản ngân hàng",
+            paymentMethod:
+                paymentMethod === "Thanh toán khi nhận hàng"
+                    ? "Thanh toán khi nhận hàng"
+                    : "Chuyển khoản ngân hàng",
         };
-    
+
         try {
             const response = await fetch(checkoutEndpoint, {
                 method: "POST",
@@ -163,7 +165,7 @@ export default function CheckoutPage() {
                 },
                 body: JSON.stringify(paymentData),
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
                 console.log("Checkout success:", data);
@@ -178,7 +180,6 @@ export default function CheckoutPage() {
             alert("Có lỗi xảy ra. Vui lòng thử lại!");
         }
     };
-    
 
     return (
         <>
@@ -383,13 +384,21 @@ export default function CheckoutPage() {
                                         type="radio"
                                         name="paymentMethod"
                                         value="COD"
-                                        onChange={() => setPaymentMethod("Thanh toán khi nhận hàng")}
-                                        checked={paymentMethod === "Thanh toán khi nhận hàng"}
+                                        onChange={() =>
+                                            setPaymentMethod(
+                                                "Thanh toán khi nhận hàng",
+                                            )
+                                        }
+                                        checked={
+                                            paymentMethod ===
+                                            "Thanh toán khi nhận hàng"
+                                        }
                                         className="mr-2"
                                     />
                                     Thanh toán khi nhận hàng
                                 </label>
-                                {paymentMethod === "Thanh toán khi nhận hàng" && (
+                                {paymentMethod ===
+                                    "Thanh toán khi nhận hàng" && (
                                     <p className="mt-2 pl-5 text-sm text-gray-500">
                                         Thanh toán tiền mặt cho người giao hàng
                                         khi nhận sản phẩm. Đây là cách đơn giản
@@ -404,10 +413,13 @@ export default function CheckoutPage() {
                                         name="paymentMethod"
                                         value="BankTransfer"
                                         onChange={() =>
-                                            setPaymentMethod("Chuyển khoản ngân hàng")
+                                            setPaymentMethod(
+                                                "Chuyển khoản ngân hàng",
+                                            )
                                         }
                                         checked={
-                                            paymentMethod === "Chuyển khoản ngân hàng"
+                                            paymentMethod ===
+                                            "Chuyển khoản ngân hàng"
                                         }
                                         className="mr-2"
                                     />
