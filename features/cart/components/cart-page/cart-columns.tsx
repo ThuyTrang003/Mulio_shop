@@ -6,9 +6,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 
-import { CartItem } from "@/types/cart-item-type";
-
 import { moneyFormatter } from "@/utils/money-formatter";
+
+import { CartItem } from "@/features/cart/types/cart-item-type";
 
 import { Button } from "@/components/ui/button";
 

@@ -5,7 +5,7 @@ import { useUpdateProductToCart } from "@/hooks/cart-hook/use-cart";
 
 import useCartStore from "@/stores/cart-store";
 
-import { CartItem } from "@/types/cart-item-type";
+import { CartItem } from "@/features/cart/types/cart-item-type";
 
 import { Input } from "@/components/ui/input";
 

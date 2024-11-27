@@ -1,10 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { useAddProductToCart } from "@/hooks/cart-hook/use-cart";
 import { useGetProductByColorSize } from "@/hooks/product-hook/useProduct";
+import { useAddProductToWishList } from "@/hooks/wish-list-hook/useWishList";
 
 import useCartStore from "@/stores/cart-store";
 
@@ -43,6 +45,16 @@ export function ProductInfor({ productData }: ProductInforProps) {
         useAddProductToCart();
     const queryClient = useQueryClient();
 
+    const { mutate: addToWishList } = useAddProductToWishList();
+    const handleAddToWishList = () => {
+        addToWishList(productData.skuBase, {
+            onSuccess: () => {
+                toast(
+                    `Item ${productData.productName} added to wish list successfully`,
+                );
+            },
+        });
+    };
     const handleAddProductToCart = () => {
         addProductToCart(
             {
@@ -53,7 +65,7 @@ export function ProductInfor({ productData }: ProductInforProps) {
             {
                 onSuccess: () => {
                     toast(
-                        `Item ${productByColorSize.productName} added successfully`,
+                        `Item ${productByColorSize.productName} added to cart successfully`,
                     );
                     queryClient.invalidateQueries({
                         queryKey: ["getCart"],
@@ -168,6 +180,13 @@ export function ProductInfor({ productData }: ProductInforProps) {
                         disabled={pendingAddProductToCart}
                     >
                         Thêm vào giỏ hàng
+                    </Button>
+                    <Button
+                        className="border border-black hover:text-red-600"
+                        variant="outline"
+                        onClick={handleAddToWishList}
+                    >
+                        <Heart />
                     </Button>
                 </div>
             </div>

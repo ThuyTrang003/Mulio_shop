@@ -1,7 +1,3 @@
-"use client";
-
-import { useAuthStore } from "@/stores/auth";
-
 import Footer from "@/features/layout/footer";
 import Navbar from "@/features/layout/nav-bar";
 
@@ -10,7 +6,6 @@ export default function MainLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const { setToken, token } = useAuthStore();
     return (
         <div className="flex min-h-screen flex-col">
             <Navbar /> {/* Navbar sẽ hiển thị ở tất cả các trang */}

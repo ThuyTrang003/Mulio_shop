@@ -6,15 +6,15 @@ import Image from "next/image";
 
 import { useGetProductByBase } from "@/hooks/product-hook/useProduct";
 
-import { CustomerReview } from "@/features/review/customer-review";
+import { CustomerReview } from "@/features/review/components/customer-review";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface DetailProductProps {
-    id: string | string[] | undefined; // The product id
+    id: string | string[]; // The product id
 }
 export function DetailProduct({ id }: DetailProductProps) {
-    const { data: productByBase, isError, isSuccess } = useGetProductByBase(id);
+    const { data: productByBase } = useGetProductByBase(id);
 
     return (
         <>
