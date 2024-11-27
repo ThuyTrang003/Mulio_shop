@@ -18,8 +18,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             className="flex h-[40vh] w-full flex-col justify-center bg-cover p-4 text-center"
             style={{ backgroundImage: `url(${backgroundImage})` }}
         >
-            <h2 className="text-5xl font-bold text-white">{title}</h2>
-            <Breadcrumb>
+            <h2 className="text-4xl font-bold text-white">{title}</h2>
+            <Breadcrumb className="flex items-center justify-center gap-2">
                 {breadcrumbItems.map((item, index) => (
                     <React.Fragment key={index}>
                         <BreadcrumbItem>
@@ -27,7 +27,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                                 href={item.href}
                                 className={`text-xl text-white ${
                                     index === breadcrumbItems.length - 1
-                                        ? "font-medium"
+                                        ? "border-b-2 border-white"
                                         : ""
                                 }`}
                             >

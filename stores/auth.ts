@@ -9,7 +9,6 @@ interface AuthStore {
     userId: string | null;
     setUserId: (userId: string) => void;
     setToken: (token: { accessToken: string; refreshToken: string }) => void;
-    refreshToken: (token: { refreshToken: string }) => void;
     resetAuth: () => void;
 }
 export const useAuthStore = create(
@@ -21,21 +20,6 @@ export const useAuthStore = create(
             },
             userId: null,
             setUserId: (userId) => set({ userId: userId }),
-            refreshToken: () => {
-                const { token } = get();
-                if (token.refreshToken) {
-                    set({
-                        token: {
-                            accessToken: token.refreshToken,
-                            refreshToken: token.refreshToken,
-                        },
-                    });
-                } else {
-                    console.warn(
-                        "Refresh token is null. Cannot refresh access token.",
-                    );
-                }
-            },
             setToken: (payload) =>
                 set(() => ({
                     token: {
@@ -48,8 +32,8 @@ export const useAuthStore = create(
                     token: {
                         accessToken: null,
                         refreshToken: null,
+                        userId: null,
                     },
-                    userId: null,
                 })),
         }),
 

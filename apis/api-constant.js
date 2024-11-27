@@ -71,6 +71,13 @@ apiClient.interceptors.response.use(
                 resetAuth();
             }
         }
+        if (
+            response.data.status === 401 &&
+            response.data.message ===
+                "Unauthorized: Full authentication is required to access this resource"
+        ) {
+            resetAuth();
+        }
 
         return Promise.reject(error);
     },
