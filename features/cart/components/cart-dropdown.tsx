@@ -110,10 +110,10 @@ export function CartDropdown({ children }: CartDropdownProps) {
                                     variant="outline"
                                     onClick={() => router.push("/cart")}
                                 >
-                                    Cart
+                                    Xem giỏ hàng
                                 </Button>
-                                <Button className="flex-1" variant="secondary">
-                                    Checkout
+                                <Button className="flex-1" variant="secondary" onClick={() => router.push("/checkout")}>
+                                    Thanh toán
                                 </Button>
                             </div>
                         </div>

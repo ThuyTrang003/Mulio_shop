@@ -87,54 +87,59 @@ export function ProductInfor({ productData }: ProductInforProps) {
                     {moneyFormatter(productData.price)}
                 </p>
             </div>
-
-            <StarRatingDisplay rating={productData.averageRating} />
+            {productData.averageRating !== 0 && (
+                <StarRatingDisplay rating={productData.averageRating} />
+            )}
 
             <p className="text-muted-foreground">{productData.description}</p>
 
             <div className="space-y-4">
-                <div>
-                    <label className="mb-2 block text-sm font-medium">
-                        Size
-                    </label>
-                    <div className="flex gap-2">
-                        {productData.sizes.map((size) => (
-                            <Button
-                                key={size}
-                                variant={
-                                    selectedSize === size
-                                        ? "secondary"
-                                        : "outline"
-                                }
-                                onClick={() => setSelectedSize(size)}
-                                className="h-12 w-12"
-                            >
-                                {size}
-                            </Button>
-                        ))}
+                {productData.sizes.length > 0 && (
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Size
+                        </label>
+                        <div className="flex gap-2">
+                            {productData.sizes.map((size) => (
+                                <Button
+                                    key={size}
+                                    variant={
+                                        selectedSize === size
+                                            ? "secondary"
+                                            : "outline"
+                                    }
+                                    onClick={() => setSelectedSize(size)}
+                                    className="h-12 w-12"
+                                >
+                                    {size}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
+                {productData.colors.length > 0 && (
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Color
+                        </label>
+                        <div className="flex gap-2">
+                            {productData.colors.map((color) => (
+                                <Button
+                                    variant={
+                                        selectedColor === color
+                                            ? "secondary"
+                                            : "outline"
+                                    }
+                                    key={color}
+                                    onClick={() => setSelectedColor(color)}
+                                >
+                                    {color}
+                                </Button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-                <div>
-                    <label className="mb-2 block text-sm font-medium">
-                        Color
-                    </label>
-                    <div className="flex gap-2">
-                        {productData.colors.map((color) => (
-                            <Button
-                                variant={
-                                    selectedColor === color
-                                        ? "secondary"
-                                        : "outline"
-                                }
-                                key={color}
-                                onClick={() => setSelectedColor(color)}
-                            >
-                                {color}
-                            </Button>
-                        ))}
-                    </div>
-                </div>
                 {productByColorSize && (
                     <p>Số lượng: {productByColorSize.amount} </p>
                 )}
