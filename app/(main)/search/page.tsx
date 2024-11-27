@@ -99,7 +99,8 @@ const ShopPage: React.FC = () => {
             {resultsCount > 0 ? (
                 <div className="p-10">
                     <p className="text-center text-2xl font-semibold">
-                        Tìm thấy {resultsCount} kết quả cho "{searchQuery}"
+                        Tìm thấy {resultsCount} kết quả cho &quot;{searchQuery}
+                        &quot;
                     </p>
                     <hr className="my-10" />
                     <ProductSection title="" products={filteredProducts} />
@@ -107,7 +108,8 @@ const ShopPage: React.FC = () => {
             ) : (
                 <div className="p-10">
                     <p className="text-center text-2xl font-semibold">
-                        Tìm thấy {resultsCount} kết quả cho "{searchQuery}"
+                        Tìm thấy {resultsCount} kết quả cho &quot;{searchQuery}
+                        &quot;
                     </p>
                     <hr className="my-10" />
                     <p className="text-l text-center">

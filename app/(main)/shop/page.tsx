@@ -9,6 +9,17 @@ import ProductSection, {
     Product,
 } from "@/features/product/components/products-section/product-section";
 
+interface IProduct {
+    productId: string;
+    productName: string;
+    price: number;
+    color: string;
+    description: string;
+    images: string[];
+    productType: string;
+    size: string;
+    skuBase: string;
+}
 const ShopPage: React.FC = () => {
     const { token } = useAuthStore();
     const [products, setProducts] = useState<Product[]>([]);
@@ -38,7 +49,7 @@ const ShopPage: React.FC = () => {
 
                 const data = await response.json();
                 setProducts(
-                    data.data.map((product: any) => ({
+                    data.data.map((product: IProduct) => ({
                         productId: product.productId,
                         productName: product.productName,
                         price: product.price,
@@ -224,10 +235,7 @@ const ShopPage: React.FC = () => {
             {/* Danh sách sản phẩm */}
             <div style={{ flex: 1 }}>
                 {filteredProducts.length > 0 ? (
-                    <ProductSection
-                        title=""
-                        products={filteredProducts}
-                    />
+                    <ProductSection title="" products={filteredProducts} />
                 ) : (
                     <p>Không có sản phẩm nào phù hợp.</p>
                 )}
