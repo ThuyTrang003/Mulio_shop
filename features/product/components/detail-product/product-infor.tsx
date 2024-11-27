@@ -1,5 +1,14 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
+
+import { useAddProductToCart } from "@/hooks/cart-hook/use-cart";
+import { useGetProductByColorSize } from "@/hooks/product-hook/useProduct";
+import { useAddProductToWishList } from "@/hooks/wish-list-hook/useWishList";
+
+import useCartStore from "@/stores/cart-store";
 
 import { moneyFormatter } from "@/utils/money-formatter";
 
@@ -8,14 +17,14 @@ import { Button } from "@/components/ui/button";
 
 interface ProductInforProps {
     productData: {
-        _id: string;
-        code: string;
+        productId: string;
+        skuBase: string;
+        skuCode: string;
         productName: string;
         price: number;
         description: string;
         sizes: string[];
         colors: string[];
-        amount: number;
         status: string;
         productType: string;
         images: string[];
@@ -26,7 +35,48 @@ export function ProductInfor({ productData }: ProductInforProps) {
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState(productData.sizes[0]);
     const [selectedColor, setSelectedColor] = useState(productData.colors[0]);
+    const { data: productByColorSize } = useGetProductByColorSize({
+        color: selectedColor,
+        size: selectedSize,
+        skuBase: productData.skuBase,
+    });
+    const { cartId } = useCartStore();
+    const { mutate: addProductToCart, isPending: pendingAddProductToCart } =
+        useAddProductToCart();
+    const queryClient = useQueryClient();
 
+    const { mutate: addToWishList } = useAddProductToWishList();
+    const handleAddToWishList = () => {
+        addToWishList(productData.skuBase, {
+            onSuccess: () => {
+                toast(
+                    `Item ${productData.productName} added to wish list successfully`,
+                );
+            },
+        });
+    };
+    const handleAddProductToCart = () => {
+        addProductToCart(
+            {
+                cartId: cartId,
+                productId: productByColorSize.productId,
+                amount: quantity,
+            },
+            {
+                onSuccess: () => {
+                    toast(
+                        `Item ${productByColorSize.productName} added to cart successfully`,
+                    );
+                    queryClient.invalidateQueries({
+                        queryKey: ["getCart"],
+                    });
+                },
+                onError: () => {
+                    toast.error("Add item failed!");
+                },
+            },
+        );
+    };
     return (
         <div className="space-y-6">
             <div>
@@ -37,55 +87,62 @@ export function ProductInfor({ productData }: ProductInforProps) {
                     {moneyFormatter(productData.price)}
                 </p>
             </div>
-
-            <StarRatingDisplay rating={4.2} />
+            {productData.averageRating !== 0 && (
+                <StarRatingDisplay rating={productData.averageRating} />
+            )}
 
             <p className="text-muted-foreground">{productData.description}</p>
 
             <div className="space-y-4">
-                <div>
-                    <label className="mb-2 block text-sm font-medium">
-                        Size
-                    </label>
-                    <div className="flex gap-2">
-                        {productData.sizes.map((size) => (
-                            <Button
-                                key={size}
-                                variant={
-                                    selectedSize === size
-                                        ? "secondary"
-                                        : "outline"
-                                }
-                                onClick={() => setSelectedSize(size)}
-                                className="h-12 w-12"
-                            >
-                                {size}
-                            </Button>
-                        ))}
+                {productData.sizes.length > 0 && (
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Size
+                        </label>
+                        <div className="flex gap-2">
+                            {productData.sizes.map((size) => (
+                                <Button
+                                    key={size}
+                                    variant={
+                                        selectedSize === size
+                                            ? "secondary"
+                                            : "outline"
+                                    }
+                                    onClick={() => setSelectedSize(size)}
+                                    className="h-12 w-12"
+                                >
+                                    {size}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                </div>
-
-                <div>
-                    <label className="mb-2 block text-sm font-medium">
-                        Color
-                    </label>
-                    <div className="flex gap-2">
-                        {productData.colors.map((color) => (
-                            <Button
-                                variant={
-                                    selectedColor === color
-                                        ? "secondary"
-                                        : "outline"
-                                }
-                                key={color}
-                                onClick={() => setSelectedColor(color)}
-                            >
-                                {color}
-                            </Button>
-                        ))}
+                )}
+                {productData.colors.length > 0 && (
+                    <div>
+                        <label className="mb-2 block text-sm font-medium">
+                            Color
+                        </label>
+                        <div className="flex gap-2">
+                            {productData.colors.map((color) => (
+                                <Button
+                                    variant={
+                                        selectedColor === color
+                                            ? "secondary"
+                                            : "outline"
+                                    }
+                                    key={color}
+                                    onClick={() => setSelectedColor(color)}
+                                >
+                                    {color}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
 
+                {productByColorSize && (
+                    <p>Số lượng: {productByColorSize.amount} </p>
+                )}
                 <div className="flex items-center gap-4">
                     <div className="flex items-center rounded-md border">
                         <Button
@@ -104,12 +161,14 @@ export function ProductInfor({ productData }: ProductInforProps) {
                                     Math.max(1, parseInt(e.target.value) || 1),
                                 )
                             }
+                            disabled
                             className="w-16 border-0 text-center focus:ring-0"
                         />
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setQuantity(quantity + 1)}
+                            disabled={quantity >= productByColorSize?.amount}
                         >
                             +
                         </Button>
@@ -117,8 +176,17 @@ export function ProductInfor({ productData }: ProductInforProps) {
                     <Button
                         variant="outline"
                         className="flex-1 border border-black"
+                        onClick={handleAddProductToCart}
+                        disabled={pendingAddProductToCart}
                     >
                         Thêm vào giỏ hàng
+                    </Button>
+                    <Button
+                        className="border border-black hover:text-red-600"
+                        variant="outline"
+                        onClick={handleAddToWishList}
+                    >
+                        <Heart />
                     </Button>
                 </div>
             </div>
@@ -126,7 +194,7 @@ export function ProductInfor({ productData }: ProductInforProps) {
             <div className="space-y-2 border-t pt-4">
                 <p className="text-sm">
                     <span className="font-medium">Code:</span>{" "}
-                    {productData.code}
+                    {productData.skuBase}
                 </p>
                 <p className="text-sm">
                     <span className="font-medium">Category:</span>{" "}

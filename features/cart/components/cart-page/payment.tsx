@@ -3,12 +3,17 @@ import { moneyFormatter } from "@/utils/money-formatter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
 interface PaymentProps {
     totalPrice: number;
     totalNumber: number;
 }
 export default function Payment({ totalPrice, totalNumber }: PaymentProps) {
+    const router = useRouter();
+    const handleCheckout = () => {
+        router.push("/checkout"); // Navigate to the checkout page
+    };
     return (
         <Card className="w-full max-w-md bg-amber-1/50">
             <CardHeader>
@@ -51,7 +56,7 @@ export default function Payment({ totalPrice, totalNumber }: PaymentProps) {
                 </div>
 
                 {/* Checkout Button */}
-                <Button className="w-full bg-item/70 text-white hover:bg-item">
+                <Button className="w-full bg-item/80 text-white hover:bg-item" onClick={handleCheckout}>
                     TIẾP TỤC THANH TOÁN
                 </Button>
             </CardContent>

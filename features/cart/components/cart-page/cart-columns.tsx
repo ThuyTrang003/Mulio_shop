@@ -1,25 +1,26 @@
 "use client";
 
 import { AmountProduct } from "./amount-product";
+import { DeleteItemDialog } from "./delete-item-dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 
-import { CartItem } from "@/types/cart-item-type";
-
 import { moneyFormatter } from "@/utils/money-formatter";
+
+import { CartItem } from "@/features/cart/types/cart-item-type";
 
 import { Button } from "@/components/ui/button";
 
 export const cartColumns: ColumnDef<CartItem>[] = [
     {
-        accessorKey: "image",
+        accessorKey: "images",
         header: "Ảnh",
         cell: ({ row }) => {
             return (
                 <div className="h-16 w-16 overflow-hidden rounded-md">
                     <Image
-                        src={row.getValue("image")}
+                        src={row.original.image[0]}
                         alt={row.getValue("productName")}
                         width={64}
                         height={64}
@@ -44,6 +45,9 @@ export const cartColumns: ColumnDef<CartItem>[] = [
                     <span className="text-sm text-muted-foreground">
                         Size: {row.original.size}
                     </span>
+                    <span className="text-sm text-muted-foreground">
+                        Có sẵn: {row.original.limit}
+                    </span>
                 </div>
             );
         },
@@ -61,16 +65,7 @@ export const cartColumns: ColumnDef<CartItem>[] = [
         accessorKey: "amount",
         header: "Số lượng",
         cell: ({ row }) => {
-            return (
-                <AmountProduct
-                    item={{
-                        amount: row.getValue("amount"),
-                        color: row.original.color,
-                        size: row.original.size,
-                        skuBase: row.original.skuBase,
-                    }}
-                />
-            );
+            return <AmountProduct item={row.original} />;
         },
     },
     {
@@ -85,16 +80,18 @@ export const cartColumns: ColumnDef<CartItem>[] = [
         header: "Xóa",
         cell: ({ row }) => {
             return (
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-destructive hover:text-destructive"
-                    onClick={() => {
-                        // Handle delete
-                    }}
+                <DeleteItemDialog
+                    productId={row.original.productId}
+                    productName={row.original.productName}
                 >
-                    <Trash2 className="h-5 w-5" />
-                </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-destructive hover:text-destructive"
+                    >
+                        <Trash2 className="h-5 w-5" />
+                    </Button>
+                </DeleteItemDialog>
             );
         },
     },

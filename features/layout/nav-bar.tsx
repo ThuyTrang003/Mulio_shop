@@ -1,7 +1,6 @@
 "use client";
 
 import { CartDropdown } from "../cart/components/cart-dropdown";
-import CartPopup from "../cart/components/cart-popup";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -10,24 +9,43 @@ import {
 } from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
+
+import { useAuthStore } from "@/stores/auth";
 
 import { Input } from "@/components/ui/input";
 
 const navigation = [
     { name: "Trang chủ", href: "/home" },
     { name: "Sản phẩm", href: "/shop" },
-    { name: "Về chúng tôi", href: "/blog" },
+    { name: "Về chúng tôi", href: "/about-us" },
     { name: "Liên hệ", href: "/contact" },
 ];
 
 const Navbar: React.FC = () => {
+    // const { setToken, token, resetToken } = useAuthStore();
+    const { setToken, token } = useAuthStore();
+    const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            // Redirect to the search page with the query parameter
+            router.push(`/search?query=${searchQuery}`);
+        }
+    };
+    console.log("token", token);
+    const accessToken = token.accessToken;
+    console.log("setToken", setToken);
+    const [username, setUsername] = useState<string | null>(null);
     const [active, setActive] = useState("");
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-    const [cartPopupOpen, setCartPopupOpen] = useState(false);
+    const accountMenuRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         const currentPath = window.location.pathname;
         setActive(currentPath);
@@ -35,15 +53,51 @@ const Navbar: React.FC = () => {
 
     const handleActive = (href: string) => {
         setActive(href);
+        if (accountMenuOpen) {
+            setAccountMenuOpen(false);
+        }
     };
 
     const toggleAccountMenu = () => {
         setAccountMenuOpen((prev) => !prev);
     };
-    const toggleCartPopup = () => {
-        setCartPopupOpen((prev) => !prev); // Mở hoặc đóng popup giỏ hàng
-    };
+    useEffect(() => {
+        if (accessToken) {
+            // Gọi API để lấy thông tin user
+            fetch("http://localhost:8080/api/users", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`, // Thêm accessToken vào header
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data?.data?.username) {
+                        setUsername(data.data.username);
+                    }
+                })
+                .catch((error) =>
+                    console.error("Error fetching user data:", error),
+                );
+        }
+    }, [accessToken]);
+    useEffect(() => {
+        // Close the account menu if clicking outside of it
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                accountMenuRef.current &&
+                !accountMenuRef.current.contains(event.target as Node)
+            ) {
+                setAccountMenuOpen(false);
+            }
+        };
 
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
     return (
         <nav className="fixed left-0 top-0 z-30 w-full bg-white shadow-md">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -76,10 +130,10 @@ const Navbar: React.FC = () => {
                                                         ? "page"
                                                         : undefined
                                                 }
-                                                className={`relative rounded-md py-2 text-sm font-bold ${
+                                                className={`relative rounded-md py-2 text-base font-semibold ${
                                                     active === item.href
-                                                        ? "text-black"
-                                                        : "text-gray-600 hover:text-black"
+                                                        ? "text-[#B88E2F]"
+                                                        : "text-black hover:text-[#B88E2F]"
                                                 }`}
                                             >
                                                 {item.name}
@@ -92,94 +146,105 @@ const Navbar: React.FC = () => {
                                 ))}
 
                                 <div className="flex items-center space-x-5">
-                                    <form className="relative flex items-center">
+                                    <form
+                                        onSubmit={handleSearchSubmit}
+                                        className="relative flex items-center"
+                                    >
                                         <Input
+                                            customSize="sm"
                                             type="search"
                                             className="text-sm"
                                             placeholder="Tìm kiếm sản phẩm..."
+                                            value={searchQuery}
+                                            onChange={(e) =>
+                                                setSearchQuery(e.target.value)
+                                            }
                                         />
                                         <button
                                             type="submit"
-                                            className="absolute right-0 top-0 p-2 text-gray-300 hover:text-black"
+                                            className="absolute right-0 top-0 rounded-sm p-2 text-gray-300 hover:bg-slate-200 hover:text-black"
                                         >
-                                            <IoSearch className="h-6 w-6" />
+                                            <IoSearch className="h-5 w-5" />
                                         </button>
                                     </form>
                                     <Link
                                         href="/favorites"
-                                        className="relative flex items-center text-gray-600 hover:text-black"
+                                        className="relative flex items-center text-black hover:text-[#B88E2F]"
                                         onClick={() =>
-                                            handleActive("/favorites")
+                                            handleActive("/wishlist")
                                         }
                                     >
                                         <CiHeart className="h-6 w-6" />
-                                        {active === "/favorites" && (
+                                        {active === "/wishlist" && (
                                             <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
                                         )}
                                     </Link>
-                                    {/* <Link
-                    href="/cart"
-                    className="flex items-center text-gray-600 hover:text-black relative"
-                    onClick={() => handleActive("/cart")}
-                  >
-                    <IoCartOutline className="h-6 w-6" />
-                    {active === "/cart" && (
-                      <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F] " />
-                    )}
-                  </Link> */}
                                     <CartDropdown>
-                                        <button
-                                            onClick={toggleCartPopup} // Mở hoặc đóng popup giỏ hàng
-                                            className="relative flex items-center text-gray-600 hover:text-black"
-                                        >
+                                        <button className="relative flex items-center text-gray-600 hover:text-black">
                                             <IoCartOutline className="h-6 w-6" />
                                             {active === "/cart" && (
                                                 <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
                                             )}
                                         </button>
                                     </CartDropdown>
-                                    {/* {cartPopupOpen && (
-                                        <CartPopup onClose={toggleCartPopup} />
-                                    )}{" "} */}
-                                    {/* Hiển thị popup */}
                                     <div className="relative">
-                                        <button
-                                            onClick={toggleAccountMenu}
-                                            className="relative flex items-center text-gray-600 hover:text-black"
-                                        >
-                                            <MdAccountCircle className="h-6 w-6" />
-                                            {active === "/account" && (
-                                                <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
-                                            )}
-                                        </button>
+                                        {accessToken ? (
+                                            <button
+                                                onClick={toggleAccountMenu}
+                                                className="relative flex h-8 w-8 items-center justify-center rounded-full bg-[#B88E2F] text-white"
+                                            >
+                                                {username ? (
+                                                    <span className="text-lg uppercase">
+                                                        {username.charAt(0)}{" "}
+                                                    </span>
+                                                ) : (
+                                                    <MdAccountCircle className="h-6 w-6" />
+                                                )}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() =>
+                                                    (window.location.href =
+                                                        "/signin")
+                                                } // Điều hướng đến trang đăng nhập nếu không có token
+                                                className="relative flex items-center gap-1 text-base text-black hover:text-[#B88E2F]"
+                                            >
+                                                <MdAccountCircle className="h-6 w-6" />
+                                                Đăng nhập
+                                            </button>
+                                        )}
                                         {accountMenuOpen && (
-                                            <div className="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg">
+                                            <div
+                                                ref={accountMenuRef}
+                                                className="absolute right-0 z-10 mt-2 w-48 rounded-md border bg-white shadow-lg"
+                                            >
                                                 <Link
                                                     href="/account"
                                                     className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
-                                                    onClick={() => {
-                                                        handleActive(
-                                                            "/account",
-                                                        );
+                                                    onClick={() =>
                                                         setAccountMenuOpen(
                                                             false,
-                                                        );
-                                                    }}
+                                                        )
+                                                    }
                                                 >
                                                     Tài khoản của bạn
                                                 </Link>
-                                                <Link
-                                                    href="/signin"
-                                                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+                                                <button
                                                     onClick={() => {
-                                                        handleActive("/signin");
+                                                        setToken({
+                                                            accessToken: "",
+                                                            refreshToken: "",
+                                                        });
                                                         setAccountMenuOpen(
                                                             false,
                                                         );
+                                                        window.location.href =
+                                                            "/signin";
                                                     }}
+                                                    className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200"
                                                 >
                                                     Đăng xuất
-                                                </Link>
+                                                </button>
                                             </div>
                                         )}
                                     </div>

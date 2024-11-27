@@ -8,8 +8,9 @@ export interface CartItem {
     color: string;
     amount: number;
     productType: string;
-    image: string;
+    image: string[];
     totalPrice: number;
     skuBase: string; // code tương ứng với product id
     skuCode: string; //code tương ứng với itemId (productId, size, color)
+    limit: number;
 }
