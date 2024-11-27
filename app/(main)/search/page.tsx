@@ -1,25 +1,28 @@
 "use client";
 
 import { IProduct } from "../shop/page";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
-
-import { useAuthStore } from "@/stores/auth";
+import { useSearchParams } from "next/navigation";
+import React, { Suspense, useEffect, useState } from "react";
 
 import ProductSection, {
     Product,
 } from "@/features/product/components/products-section/product-section";
 
-const ShopPage: React.FC = () => {
-    const { token } = useAuthStore();
+export default function ShopPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ShopPageContent />
+        </Suspense>
+    );
+}
+
+function ShopPageContent() {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
-    const router = useRouter();
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get("query") || ""; // Get search query from URL
 
@@ -120,6 +123,4 @@ const ShopPage: React.FC = () => {
             )}
         </div>
     );
-};
-
-export default ShopPage;
+}
