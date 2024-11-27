@@ -3,7 +3,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa6";
+import { toast } from "sonner";
+
+import { useAddProductToWishList } from "@/hooks/wish-list-hook/useWishList";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -37,6 +39,7 @@ export function ProductPreview({
     const [isHovered, setIsHovered] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const router = useRouter();
+    const { mutate: addToWishList } = useAddProductToWishList();
 
     const handleProductClick = () => {
         router.push(`/products/${skuBase}`);
@@ -47,8 +50,14 @@ export function ProductPreview({
             // Nếu không có token, hiển thị popup
             setShowPopup(true);
         } else {
-            console.log("Thêm vào danh sách yêu thích");
             // Xử lý logic thêm vào danh sách yêu thích ở đây
+            addToWishList(skuBase, {
+                onSuccess: () => {
+                    toast(
+                        `Item ${productName} added to wish list successfully`,
+                    );
+                },
+            });
         }
     };
     const handleClosePopup = () => setShowPopup(false);

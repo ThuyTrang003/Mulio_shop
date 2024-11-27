@@ -9,6 +9,7 @@ import {
 } from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
@@ -17,7 +18,6 @@ import { MdAccountCircle } from "react-icons/md";
 import { useAuthStore } from "@/stores/auth";
 
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 
 const navigation = [
     { name: "Trang chủ", href: "/home" },
@@ -84,7 +84,10 @@ const Navbar: React.FC = () => {
     useEffect(() => {
         // Close the account menu if clicking outside of it
         const handleClickOutside = (event: MouseEvent) => {
-            if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+            if (
+                accountMenuRef.current &&
+                !accountMenuRef.current.contains(event.target as Node)
+            ) {
                 setAccountMenuOpen(false);
             }
         };
@@ -143,14 +146,19 @@ const Navbar: React.FC = () => {
                                 ))}
 
                                 <div className="flex items-center space-x-5">
-                                    <form onSubmit={handleSearchSubmit} className="relative flex items-center">
+                                    <form
+                                        onSubmit={handleSearchSubmit}
+                                        className="relative flex items-center"
+                                    >
                                         <Input
                                             customSize="sm"
                                             type="search"
                                             className="text-sm"
                                             placeholder="Tìm kiếm sản phẩm..."
                                             value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            onChange={(e) =>
+                                                setSearchQuery(e.target.value)
+                                            }
                                         />
                                         <button
                                             type="submit"
@@ -160,7 +168,7 @@ const Navbar: React.FC = () => {
                                         </button>
                                     </form>
                                     <Link
-                                        href="/wishlist"
+                                        href="/favorites"
                                         className="relative flex items-center text-black hover:text-[#B88E2F]"
                                         onClick={() =>
                                             handleActive("/wishlist")
@@ -208,7 +216,7 @@ const Navbar: React.FC = () => {
                                         {accountMenuOpen && (
                                             <div
                                                 ref={accountMenuRef}
-                                                className="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg border"
+                                                className="absolute right-0 z-10 mt-2 w-48 rounded-md border bg-white shadow-lg"
                                             >
                                                 <Link
                                                     href="/account"
