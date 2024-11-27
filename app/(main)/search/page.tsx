@@ -56,7 +56,7 @@ const ShopPage: React.FC = () => {
                         skuBase: product.skuBase,
                     })),
                 );
-            } catch (err) {
+            } catch (err: any) {
                 setError(err.message);
             } finally {
                 setLoading(false);
