@@ -21,7 +21,7 @@ export default function UserProfileForm() {
     const [userData, setUserData] = useState({
         fullName: "",
         phone: "",
-        email: "", // Thêm trường email
+        email: "",
         address: "",
     });
 
@@ -30,7 +30,7 @@ export default function UserProfileForm() {
             setUserData({
                 fullName: userInfo.fullName || "",
                 phone: userInfo.phone || "",
-                email: userInfo.email || "", // Lấy email từ userInfo
+                email: userInfo.email || "",
                 address: userInfo.address || "",
             });
         }

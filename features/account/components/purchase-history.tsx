@@ -1,126 +1,127 @@
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Input } from "@/components/ui/input";
+import { useGetCartHistory } from "@/hooks/user-hook/use-purchased";
 
-interface PurchaseItem {
-    name: string;
-    quantity: number;
+import { useAuthStore } from "@/stores/auth";
+
+import { moneyFormatter } from "@/utils/money-formatter";
+
+// Define interfaces for Product and Order
+interface Product {
+    productId: string;
+    productName: string;
+    image: string[];
+    size: string;
+    color: string;
+    amount: number;
     price: number;
-    imageUrl: string;
+    totalPrice: number;
 }
 
-interface PurchaseGroup {
-    items: PurchaseItem[];
-    total: number;
+interface Order {
+    orderId: string;
+    orderDate: string;
+    totalPrice: number;
+    orderProduct: Product[];
 }
 
 export default function PurchaseHistory() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [purchaseHistory, setPurchaseHistory] = useState<PurchaseGroup[]>([]);
-    const [filteredHistory, setFilteredHistory] = useState<PurchaseGroup[]>([]);
+    const router = useRouter();
+    const { token } = useAuthStore();
+    const { data, isLoading, isError } = useGetCartHistory();
+
+    // Define state variables for orders and products
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
 
     useEffect(() => {
-        async function fetchPurchaseHistory() {
-            try {
-                const response = await fetch(
-                    "https://your-backend-api.com/purchase-history",
-                );
-                const data: PurchaseGroup[] = await response.json();
-                setPurchaseHistory(data);
-                setFilteredHistory(data);
-            } catch (error) {
-                console.error("Error fetching purchase history:", error);
-            }
+        if (!token) {
+            router.push("/login");
         }
-
-        fetchPurchaseHistory();
-    }, []);
+    }, [token, router]);
 
     useEffect(() => {
-        if (searchTerm) {
-            const filtered = purchaseHistory.filter((group) =>
-                group.items.some((item) =>
-                    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-                ),
+        if (data) {
+            setOrders(data.content); // Set orders data
+            // Flatten products from all orders and set them in state
+            const allProducts = data.content.flatMap(
+                (order: Order) => order.orderProduct,
             );
-            setFilteredHistory(filtered);
-        } else {
-            setFilteredHistory(purchaseHistory);
+            setProducts(allProducts); // Set all products data
         }
-    }, [searchTerm, purchaseHistory]);
+    }, [data]);
+
+    if (isLoading) {
+        return (
+            <div className="py-6 text-center">
+                Loading your purchase history...
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <div className="py-6 text-center text-red-500">
+                Failed to load purchase history.
+            </div>
+        );
+    }
 
     return (
-        <div className="container mx-auto space-y-6 px-4 py-6">
-            <div>
-                <Input
-                    type="text"
-                    placeholder="Bạn có thể tìm kiếm theo tên Shop hoặc tên Sản phẩm"
-                    className="w-full rounded-md border border-gray-300 p-2"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </div>
-
-            <div className="space-y-6">
-                {filteredHistory.map((group, groupIndex) => (
+        <div className="container mx-auto p-4">
+            <h1 className="mb-6 text-2xl font-bold">Your Purchase History</h1>
+            {orders.length === 0 ? (
+                <div className="py-6 text-center">You have no orders yet.</div>
+            ) : (
+                orders.map((order: Order) => (
                     <div
-                        key={groupIndex}
-                        className="rounded-lg bg-gray-50 p-4 shadow-md"
+                        key={order.orderId}
+                        className="mb-8 rounded-lg border bg-white p-4 shadow-md"
                     >
-                        <div className="space-y-4">
-                            {group.items.map((item, itemIndex) => (
+                        <h2 className="mb-4 text-xl font-semibold">
+                            Order ID: {order.orderId}
+                        </h2>
+                        <p className="mb-2 text-gray-600">
+                            Order Date:{" "}
+                            {new Date(order.orderDate).toLocaleDateString()}
+                        </p>
+                        <p className="mb-4 text-gray-600">
+                            Total Price: {moneyFormatter(order.totalPrice)}
+                        </p>
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                            {order.orderProduct.map((product: Product) => (
                                 <div
-                                    key={itemIndex}
-                                    className={`flex items-center justify-between ${
-                                        itemIndex < group.items.length - 1
-                                            ? "border-b pb-4"
-                                            : ""
-                                    }`}
+                                    key={product.productId}
+                                    className="rounded-lg border bg-gray-50 p-4 shadow-sm"
                                 >
-                                    <div className="flex items-center space-x-4">
-                                        <div className="relative h-16 w-16">
-                                            <Image
-                                                src={item.imageUrl}
-                                                alt={item.name}
-                                                layout="fill"
-                                                objectFit="cover"
-                                                className="rounded"
-                                            />
-                                        </div>
-                                        <div>
-                                            <p className="font-bold text-gray-800">
-                                                {item.name}
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                x{item.quantity}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <p className="font-semibold text-gray-700">
-                                        {item.price.toLocaleString("vi-VN")} VND
+                                    <img
+                                        src={product.image[0]}
+                                        alt={product.productName}
+                                        className="mb-2 h-32 w-full rounded object-cover"
+                                    />
+                                    <h3 className="text-lg font-medium">
+                                        {product.productName}
+                                    </h3>
+                                    <p className="text-sm text-gray-500">
+                                        {product.size} - {product.color}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        Quantity: {product.amount}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        Price: {moneyFormatter(product.price)}
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        Total:{" "}
+                                        {moneyFormatter(product.totalPrice)}
                                     </p>
                                 </div>
                             ))}
                         </div>
-
-                        <div className="mt-4 flex items-center justify-between border-t pt-4">
-                            <p className="font-bold text-gray-800">
-                                Thành tiền
-                            </p>
-                            <p className="text-xl font-bold text-gray-900">
-                                {group.total.toLocaleString("vi-VN")} VND
-                            </p>
-                        </div>
                     </div>
-                ))}
-            </div>
-
-            <div className="flex justify-center">
-                <button className="rounded bg-yellow-600 px-6 py-2 font-bold text-white">
-                    Xem thêm
-                </button>
-            </div>
+                ))
+            )}
         </div>
     );
 }

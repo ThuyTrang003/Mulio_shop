@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "sonner";
 
+// Import toast từ Sonner
 import { usePostPassword } from "@/hooks/user-hook/use-password";
 
 import { useAuthStore } from "@/stores/auth";
@@ -35,70 +37,74 @@ export default function ChangePasswordForm() {
                     newPassword: formData.newPassword,
                     accessToken: token?.accessToken, // Pass valid token
                 });
-                console.log("Password updated successfully.");
-
-                // Reset form data
+                toast.success("Cập nhật mật khẩu thành công."); // Success notification
                 setFormData({
                     currentPassword: "",
                     newPassword: "",
                     confirmPassword: "",
                 });
             } catch (error) {
+                toast.error("Đã xảy ra lỗi khi cập nhật mật khẩu."); // Error notification
                 console.error("Error updating password:", error);
             }
         } else {
-            console.error("Passwords do not match!");
+            toast.error("Mật khẩu xác nhận không khớp!"); // Password mismatch notification
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
-            <div>
-                <Label htmlFor="currentPassword" className="mb-2 block">
-                    Mật khẩu hiện tại
-                </Label>
-                <Input
-                    id="currentPassword"
-                    name="currentPassword"
-                    type="password"
-                    value={formData.currentPassword}
-                    onChange={handleChange}
-                    placeholder="Nhập mật khẩu hiện tại"
-                />
-            </div>
-            <div>
-                <Label htmlFor="newPassword" className="mb-2 block">
-                    Mật khẩu mới
-                </Label>
-                <Input
-                    id="newPassword"
-                    name="newPassword"
-                    type="password"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                    placeholder="Nhập mật khẩu mới"
-                />
-            </div>
-            <div>
-                <Label htmlFor="confirmPassword" className="mb-2 block">
-                    Xác nhận mật khẩu
-                </Label>
-                <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    placeholder="Nhập lại mật khẩu mới"
-                />
-            </div>
-            <Button
-                type="submit"
-                variant="secondary"
-                className="w-full bg-yellow-600 text-white hover:bg-yellow-700"
+        <>
+            <form
+                onSubmit={handleSubmit}
+                className="mx-auto max-w-md space-y-4"
             >
-                Cập nhật mật khẩu mới
-            </Button>
-        </form>
+                <div>
+                    <Label htmlFor="currentPassword" className="mb-2 block">
+                        Mật khẩu hiện tại
+                    </Label>
+                    <Input
+                        id="currentPassword"
+                        name="currentPassword"
+                        type="password"
+                        value={formData.currentPassword}
+                        onChange={handleChange}
+                        placeholder="Nhập mật khẩu hiện tại"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="newPassword" className="mb-2 block">
+                        Mật khẩu mới
+                    </Label>
+                    <Input
+                        id="newPassword"
+                        name="newPassword"
+                        type="password"
+                        value={formData.newPassword}
+                        onChange={handleChange}
+                        placeholder="Nhập mật khẩu mới"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="confirmPassword" className="mb-2 block">
+                        Xác nhận mật khẩu
+                    </Label>
+                    <Input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="Nhập lại mật khẩu mới"
+                    />
+                </div>
+                <Button
+                    type="submit"
+                    variant="secondary"
+                    className="w-full bg-yellow-600 text-white hover:bg-yellow-700"
+                >
+                    Cập nhật mật khẩu mới
+                </Button>
+            </form>
+        </>
     );
 }
