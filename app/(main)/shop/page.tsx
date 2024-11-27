@@ -9,7 +9,7 @@ import ProductSection, {
     Product,
 } from "@/features/product/components/products-section/product-section";
 
-interface IProduct {
+export interface IProduct {
     productId: string;
     productName: string;
     price: number;

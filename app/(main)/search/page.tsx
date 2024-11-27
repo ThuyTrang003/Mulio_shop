@@ -1,5 +1,6 @@
 "use client";
 
+import { IProduct } from "../shop/page";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
@@ -41,7 +42,7 @@ const ShopPage: React.FC = () => {
 
                 const data = await response.json();
                 setProducts(
-                    data.data.map((product: any) => ({
+                    data.data.map((product: IProduct) => ({
                         productId: product.productId,
                         productName: product.productName,
                         price: product.price,
