@@ -41,7 +41,7 @@ const AboutUsPage: React.FC = () => {
                     { label: "Về chúng tôi", href: "/about-us" },
                 ]}
             />
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-28 py-8">
                 <div className="flex flex-col items-center justify-center">
                     <h2 className="mb-4 text-4xl font-semibold">
                         Về chúng tôi

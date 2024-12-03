@@ -41,7 +41,7 @@ const ContactPage: React.FC = () => {
                     { label: "Contact", href: "/contact" },
                 ]}
             />
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-28 py-8">
                 <div className="flex flex-col items-center justify-center">
                     <h2 className="mb-4 text-4xl font-semibold">
                         Liên hệ với chúng tôi
