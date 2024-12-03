@@ -13,14 +13,14 @@ export default function CarouselLayoutPage() {
         <div className="flex min-h-screen items-center bg-gray-100">
             <div className="ml-20 w-1/3 p-8">
                 <h2 className="mb-4 text-4xl font-semibold text-gray-800">
-                    50+ Beautiful Fashion Inspiration
+                    50+ Cảm hứng thời trang
                 </h2>
                 <p className="mb-6 text-lg text-gray-600">
-                    Our designer already made a lot of beautiful prototypes of
-                    outfits that inspire you.
+                    Nhà thiết kế của chúng tôi đã tạo ra nhiều mẫu trang phục
+                    đẹp mắt để truyền cảm hứng cho bạn.
                 </p>
                 <button className="rounded-lg bg-yellow-700 px-6 py-2 text-white transition duration-300 hover:bg-blue-700">
-                    Explore More
+                    Khám phá thêm
                 </button>
             </div>
 

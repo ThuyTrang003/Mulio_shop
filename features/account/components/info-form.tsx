@@ -1,5 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { useGetInfo, useUpdateInfo } from "@/hooks/user-hook/use-profile";
 
@@ -7,10 +8,7 @@ import { useAuthStore } from "@/stores/auth";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// Import custom Input component
 import { Label } from "@/components/ui/label";
-
-// Import custom Label component
 
 export default function UserProfileForm() {
     const router = useRouter();
@@ -36,9 +34,17 @@ export default function UserProfileForm() {
         }
     }, [userInfo]);
 
-    const handleSave = () => {
-        updateMutate(userData);
-        setEditing(false);
+    const handleSave = async () => {
+        try {
+            // Call the update mutation function
+            await updateMutate(userData);
+            setEditing(false);
+            // Show success notification
+            toast.success("Thông tin đã được cập nhật thành công!");
+        } catch (err) {
+            // Show error notification
+            toast.error("Đã xảy ra lỗi khi cập nhật thông tin.");
+        }
     };
 
     if (isError) {
@@ -108,7 +114,7 @@ export default function UserProfileForm() {
                                 })
                             }
                             customSize="default"
-                            disabled={!editing}
+                            disabled
                         />
                     </div>
                     <div className="flex flex-col">
