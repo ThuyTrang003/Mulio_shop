@@ -13,7 +13,12 @@ interface ProductHomeSectionProps {
 const ProductHomeSection: React.FC<ProductHomeSectionProps> = ({
     products = [],
 }) => {
-    const displayedProducts = products.slice(0, 8);
+    const uniqueProducts = Array.from(
+        new Map(
+            products.map((product) => [product.skuBase, product]), // Sử dụng skuBase để lọc
+        ).values(),
+    );
+    const displayedProducts = uniqueProducts.slice(0, 8);
 
     return (
         <div className="product-home-section">

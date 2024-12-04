@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { usePostReviewsByBase } from "@/hooks/review-hook/useReview";
 import { useGetCartHistory } from "@/hooks/user-hook/use-purchased";
@@ -10,8 +11,6 @@ import { useGetCartHistory } from "@/hooks/user-hook/use-purchased";
 import { useAuthStore } from "@/stores/auth";
 
 import { moneyFormatter } from "@/utils/money-formatter";
-
-import { ReviewType } from "@/features/review/types/review-type";
 
 import StarRating from "@/components/star-rating";
 import { Button } from "@/components/ui/button";
@@ -136,32 +135,28 @@ export default function PurchaseHistory() {
         const reviewData = {
             rating,
             comment,
-            images: images.map((img) => URL.createObjectURL(img)), // Convert to URL if needed
+            images: images.map((img) => URL.createObjectURL(img)), // Convert to URL nếu cần
             productId: selectedProduct.productId, // Sử dụng ID sản phẩm
         };
 
         try {
             await postReview(reviewData);
-            console.log("Review submitted successfully!");
+            toast.success("Đánh giá đã được gửi thành công!");
             closeReviewDialog();
         } catch (error) {
             console.error("Error submitting review:", error);
-            alert("An error occurred while submitting the review.");
+            toast.error("Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.");
         }
     };
 
     if (isLoading) {
-        return (
-            <div className="py-6 text-center">
-                Loading your purchase history...
-            </div>
-        );
+        return <div className="py-6 text-center">Đang tải...</div>;
     }
 
     if (isError) {
         return (
             <div className="py-6 text-center text-red-500">
-                Failed to load purchase history.
+                Tải đơn hàng của bạn thất bại.
             </div>
         );
     }
@@ -201,7 +196,9 @@ export default function PurchaseHistory() {
                 Lịch sử mua hàng
             </h1>
             {orders.length === 0 ? (
-                <div className="py-6 text-center">You have no orders yet.</div>
+                <div className="py-6 text-center">
+                    Bạn chưa có đơn hàng nào.
+                </div>
             ) : (
                 orders.map((order: Order) => (
                     <div
@@ -254,7 +251,7 @@ export default function PurchaseHistory() {
                                                     openReviewDialog(product)
                                                 }
                                             >
-                                                Cập nhật đánh giá
+                                                Sửa đánh giá
                                             </Button>
                                         ) : (
                                             <Button
