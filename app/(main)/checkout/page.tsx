@@ -207,6 +207,19 @@ export default function CheckoutPage() {
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập họ tên"
                                 value={customer?.data.fullName || ""}
+                                onChange={(e) =>
+                                    setCustomer((prev) =>
+                                        prev
+                                            ? {
+                                                  ...prev,
+                                                  data: {
+                                                      ...prev.data,
+                                                      fullName: e.target.value,
+                                                  },
+                                              }
+                                            : null,
+                                    )
+                                }
                             />
                         </div>
                         <div>
@@ -218,6 +231,19 @@ export default function CheckoutPage() {
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập số điện thoại"
                                 value={customer?.data.phone || ""}
+                                onChange={(e) =>
+                                    setCustomer((prev) =>
+                                        prev
+                                            ? {
+                                                  ...prev,
+                                                  data: {
+                                                      ...prev.data,
+                                                      phone: e.target.value,
+                                                  },
+                                              }
+                                            : null,
+                                    )
+                                }
                             />
                         </div>
                         <div>
@@ -229,6 +255,19 @@ export default function CheckoutPage() {
                                 className="mt-1 block w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-[#B88E2F] focus:outline-none focus:ring-[#B88E2F] sm:text-sm"
                                 placeholder="Nhập địa chỉ"
                                 value={customer?.data.address || ""}
+                                onChange={(e) =>
+                                    setCustomer((prev) =>
+                                        prev
+                                            ? {
+                                                  ...prev,
+                                                  data: {
+                                                      ...prev.data,
+                                                      address: e.target.value,
+                                                  },
+                                              }
+                                            : null,
+                                    )
+                                }
                             />
                         </div>
                         <div>
