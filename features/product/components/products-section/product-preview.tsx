@@ -16,7 +16,7 @@ import { Card } from "@/components/ui/card";
 interface ProductPreviewProps {
     productId: string;
     productType: string;
-    images: string;
+    images: string[];
     color: string;
     productName: string;
     price: number;
