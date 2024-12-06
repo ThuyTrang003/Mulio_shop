@@ -14,6 +14,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { IoCartOutline, IoSearch } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
+import { toast } from "sonner";
+
+import { useLogout } from "@/hooks/auth-hook/useAuth";
 
 import { useAuthStore } from "@/stores/auth";
 
@@ -39,9 +42,7 @@ const Navbar: React.FC = () => {
             router.push(`/search?query=${searchQuery}`);
         }
     };
-    console.log("token", token);
     const accessToken = token.accessToken;
-    console.log("setToken", setToken);
     const [username, setUsername] = useState<string | null>(null);
     const [active, setActive] = useState("");
     const [accountMenuOpen, setAccountMenuOpen] = useState(false);
@@ -98,6 +99,24 @@ const Navbar: React.FC = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    const { resetAuth } = useAuthStore();
+    const { mutate: logout } = useLogout();
+    // const {data: logout} = useLogout();
+    const handleLogout = () => {
+        logout(undefined, {
+            onSuccess: () => {
+                toast.success("Logout successfully!");
+                router.push("/home");
+                resetAuth();
+                setAccountMenuOpen(false);
+            },
+            onError: () => {
+                toast("Logout failed!");
+            },
+        });
+    };
+
     return (
         <nav className="fixed left-0 top-0 z-30 w-full bg-white shadow-md">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -230,17 +249,7 @@ const Navbar: React.FC = () => {
                                                     Tài khoản của bạn
                                                 </Link>
                                                 <button
-                                                    onClick={() => {
-                                                        setToken({
-                                                            accessToken: "",
-                                                            refreshToken: "",
-                                                        });
-                                                        setAccountMenuOpen(
-                                                            false,
-                                                        );
-                                                        window.location.href =
-                                                            "/signin";
-                                                    }}
+                                                    onClick={handleLogout}
                                                     className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200"
                                                 >
                                                     Đăng xuất

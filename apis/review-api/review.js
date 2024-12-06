@@ -7,7 +7,7 @@ export const getReviewsByBase = async (skuBase) => {
         const response = await axiosNoAuth.get(url);
         return response.data.data;
     } catch (error) {
-        console.error("get product by sku base failed:", error);
+        console.error("get reviews by sku base failed:", error);
         throw error.response.data;
     }
 };
@@ -39,4 +39,3 @@ export const postReviews = async (payload) => {
         throw error.response.data;
     }
 };
-

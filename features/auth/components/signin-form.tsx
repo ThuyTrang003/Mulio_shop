@@ -42,7 +42,7 @@ export function SigninForm() {
                 setCartId(data.cartId);
                 setUserId(data.userId);
                 toast("Signin successfully!");
-                router.replace("/");
+                router.replace("/home");
             },
             onError: () => {
                 toast.error("Signin failed!");

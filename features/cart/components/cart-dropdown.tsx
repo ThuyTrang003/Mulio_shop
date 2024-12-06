@@ -4,6 +4,7 @@ import { DeleteItemDialog } from "./cart-page/delete-item-dialog";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -26,11 +27,12 @@ interface CartDropdownProps {
 }
 
 export function CartDropdown({ children }: CartDropdownProps) {
+    const [isOpen, setIsOpen] = useState(false);
     const { data: cartData } = useGetCart();
 
     const router = useRouter();
     return (
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 pl-4" align="end">
                 <h2 className="mb-4 mt-2 font-semibold">Cart</h2>
@@ -108,11 +110,21 @@ export function CartDropdown({ children }: CartDropdownProps) {
                                     }
                                     className="flex-1"
                                     variant="outline"
-                                    onClick={() => router.push("/cart")}
+                                    onClick={() => {
+                                        router.push("/cart");
+                                        setIsOpen(false);
+                                    }}
                                 >
                                     Xem giỏ hàng
                                 </Button>
-                                <Button className="flex-1" variant="secondary" onClick={() => router.push("/checkout")}>
+                                <Button
+                                    className="flex-1"
+                                    variant="secondary"
+                                    onClick={() => {
+                                        router.push("/checkout");
+                                        setIsOpen(false);
+                                    }}
+                                >
                                     Thanh toán
                                 </Button>
                             </div>
