@@ -9,6 +9,8 @@ import { useAddProductToWishList } from "@/hooks/wish-list-hook/useWishList";
 
 import { useAuthStore } from "@/stores/auth";
 
+import { moneyFormatter } from "@/utils/money-formatter";
+
 import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -35,9 +37,7 @@ export function ProductPreview({
     skuBase,
 }: ProductPreviewProps) {
     const { token } = useAuthStore();
-    const accessToken = token.accessToken;
     const [isHovered, setIsHovered] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
     const router = useRouter();
     const { mutate: addToWishList } = useAddProductToWishList();
 
@@ -46,21 +46,19 @@ export function ProductPreview({
     };
     const handleFavoriteClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        if (!accessToken) {
-            // Nếu không có token, hiển thị popup
-            setShowPopup(true);
+
+        if (token.accessToken === "") {
+            toast.error("Vui lòng đăng nhập");
+            router.push("/signin");
         } else {
             // Xử lý logic thêm vào danh sách yêu thích ở đây
             addToWishList(skuBase, {
                 onSuccess: () => {
-                    toast(
-                        `Item ${productName} added to wish list successfully`,
-                    );
+                    toast(`${productName} đã được thêm vào yêu thích`);
                 },
             });
         }
     };
-    const handleClosePopup = () => setShowPopup(false);
 
     return (
         <Card
@@ -90,7 +88,7 @@ export function ProductPreview({
                             {color}
                         </h4>
                         <p className="text-sm font-semibold text-[#B88E2F] md:text-base">
-                            {price.toLocaleString("vi-VN")} VND
+                            {moneyFormatter(price)}
                         </p>
                     </div>
                     <div className="flex flex-col justify-end gap-2">
@@ -117,38 +115,6 @@ export function ProductPreview({
                     Mua hàng
                 </Button>
             </div>
-            {showPopup && (
-                <Modal onClose={handleClosePopup}>
-                    <div className="p-4 text-center">
-                        <h3 className="text-lg font-semibold">
-                            Thêm vào danh sách yêu thích
-                        </h3>
-                        <p className="mt-2 text-sm text-gray-600">
-                            <span className="text-red-500">!</span> Vui lòng
-                            đăng nhập để sử dụng tính năng danh sách yêu thích
-                            hoặc đăng ký tài khoản mới.
-                        </p>
-                        <div className="mt-4 flex justify-center gap-4">
-                            <Button
-                                variant="contained"
-                                onClick={() =>
-                                    console.log("Đi tới trang đăng nhập")
-                                }
-                            >
-                                Đăng nhập
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={() =>
-                                    console.log("Đi tới trang đăng ký")
-                                }
-                            >
-                                Đăng ký
-                            </Button>
-                        </div>
-                    </div>
-                </Modal>
-            )}
         </Card>
     );
 }

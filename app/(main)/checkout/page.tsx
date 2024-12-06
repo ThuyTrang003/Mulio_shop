@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { useGetCart } from "@/hooks/cart-hook/use-cart";
@@ -11,10 +12,8 @@ import { moneyFormatter } from "@/utils/money-formatter";
 
 import { CartItem } from "@/features/cart/types/cart-item-type";
 import PageHeader from "@/features/layout/page-header";
-import { Product } from "@/features/product/components/products-section/product-section";
 
 import Select from "@/components/select";
-import { Input } from "@/components/ui/input";
 
 interface Location {
     code: number;
@@ -30,9 +29,8 @@ interface Customer {
 }
 
 export default function CheckoutPage() {
-    const token = useAuthStore();
-    const accessToken = token.token.accessToken;
-    console.log("accessToken", accessToken);
+    const { token } = useAuthStore();
+    const accessToken = token.accessToken;
     const [provinces, setProvinces] = useState<Location[]>([]);
     const [districts, setDistricts] = useState<Location[]>([]);
     const [wards, setWards] = useState<Location[]>([]);
@@ -46,6 +44,12 @@ export default function CheckoutPage() {
     const { data: cartData } = useGetCart();
     console.log("cartData", cartData);
 
+    useEffect(() => {
+        if (token)
+            if (token.accessToken === "") {
+                redirect("/signin"); // Chuyển hướng nếu đã login
+            }
+    }, [token]);
     useEffect(() => {
         fetch("http://localhost:8080/api/users/customer-info", {
             method: "GET", // Ensure the method is GET
@@ -407,7 +411,7 @@ export default function CheckoutPage() {
                             <span className="text-lg text-[#B88E2F]">
                                 {cartData && cartData.totalPrice
                                     ? moneyFormatter(cartData.totalPrice)
-                                    : "0 VND"}
+                                    : moneyFormatter(0)}
                             </span>
                         </div>
                         <hr className="my-4 border-gray-300" />

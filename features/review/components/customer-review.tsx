@@ -20,7 +20,7 @@ export function CustomerReview({ skuBase }: CustomerReviewProps) {
             {reviewsByBase &&
                 (reviewsByBase.length === 0 ? (
                     <div className="text-center text-muted-foreground">
-                        No reviews found.
+                        Không có đánh giá!
                     </div>
                 ) : (
                     reviewsByBase.map((review: ReviewType) => (

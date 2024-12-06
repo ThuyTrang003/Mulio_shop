@@ -30,9 +30,9 @@ export const useAuthStore = create(
             resetAuth: () =>
                 set(() => ({
                     token: {
-                        accessToken: null,
-                        refreshToken: null,
-                        userId: null,
+                        accessToken: "",
+                        refreshToken: "",
+                        userId: "",
                     },
                 })),
         }),

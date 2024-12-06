@@ -34,7 +34,7 @@ export function SignupForm() {
         signupMutate(data, {
             onSuccess: (resp) => {
                 toast(
-                    "Signup successfully! Please check your mail for confirmation",
+                    "Đăng ký thành công, vui lòng xác thực qua thư được gửi qua email",
                 );
             },
             onError: (resp) => {

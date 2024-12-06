@@ -171,7 +171,6 @@ const Navbar: React.FC = () => {
                                     >
                                         <Input
                                             customSize="sm"
-                                            type="search"
                                             className="text-sm"
                                             placeholder="Tìm kiếm sản phẩm..."
                                             value={searchQuery}
@@ -186,40 +185,45 @@ const Navbar: React.FC = () => {
                                             <IoSearch className="h-5 w-5" />
                                         </button>
                                     </form>
-                                    <Link
-                                        href="/favorites"
-                                        className="relative flex items-center text-black hover:text-[#B88E2F]"
-                                        onClick={() =>
-                                            handleActive("/wishlist")
-                                        }
-                                    >
-                                        <CiHeart className="h-6 w-6" />
-                                        {active === "/wishlist" && (
-                                            <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
-                                        )}
-                                    </Link>
-                                    <CartDropdown>
-                                        <button className="relative flex items-center text-gray-600 hover:text-black">
-                                            <IoCartOutline className="h-6 w-6" />
-                                            {active === "/cart" && (
-                                                <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
-                                            )}
-                                        </button>
-                                    </CartDropdown>
+
                                     <div className="relative">
                                         {accessToken ? (
-                                            <button
-                                                onClick={toggleAccountMenu}
-                                                className="relative flex h-8 w-8 items-center justify-center rounded-full bg-[#B88E2F] text-white"
-                                            >
-                                                {username ? (
-                                                    <span className="text-lg uppercase">
-                                                        {username.charAt(0)}{" "}
-                                                    </span>
-                                                ) : (
-                                                    <MdAccountCircle className="h-6 w-6" />
-                                                )}
-                                            </button>
+                                            <div className="flex items-center space-x-5">
+                                                <Link
+                                                    href="/favorites"
+                                                    className="relative flex items-center text-black hover:text-[#B88E2F]"
+                                                    onClick={() =>
+                                                        handleActive(
+                                                            "/wishlist",
+                                                        )
+                                                    }
+                                                >
+                                                    <CiHeart className="h-6 w-6" />
+                                                    {active === "/wishlist" && (
+                                                        <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
+                                                    )}
+                                                </Link>
+                                                <CartDropdown>
+                                                    <button className="relative flex items-center text-gray-600 hover:text-black">
+                                                        <IoCartOutline className="h-6 w-6" />
+                                                        {active === "/cart" && (
+                                                            <span className="absolute left-0 right-0 top-7 h-0.5 bg-[#B88E2F]" />
+                                                        )}
+                                                    </button>
+                                                </CartDropdown>
+                                                <button
+                                                    onClick={toggleAccountMenu}
+                                                    className="relative flex h-8 w-8 items-center justify-center rounded-full bg-[#B88E2F] text-white"
+                                                >
+                                                    {username ? (
+                                                        <span className="text-lg uppercase">
+                                                            {username.charAt(0)}{" "}
+                                                        </span>
+                                                    ) : (
+                                                        <MdAccountCircle className="h-6 w-6" />
+                                                    )}
+                                                </button>
+                                            </div>
                                         ) : (
                                             <button
                                                 onClick={() =>

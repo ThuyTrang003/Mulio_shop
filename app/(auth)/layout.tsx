@@ -1,26 +1,22 @@
-"use client"
-import { useAuthStore } from "@/stores/auth";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import Image from "next/image";
 
 export default function AuthLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const { token } = useAuthStore();
-  const router = useRouter();
-  // useEffect(() => { 
-  //   if (token)
-  //         if (token !== "" ) {
-  //             router.replace("/"); // Chuyển hướng nếu đã login
-  //         }
-  // }, [token]);
-
-  return (
-    <main className="bg-white flex justify-between h-screen w-screen">
-      <section className="w-1/2 h-screen">{children}</section>
-      <div className=" m-2 bg-black w-1/2 rounded-xl"></div>
-    </main>
-  );
+    return (
+        <main className="flex h-screen w-screen justify-between bg-white">
+            <section className="h-screen w-1/2">{children}</section>
+            <div className="m-2 flex w-1/2 justify-end rounded-xl">
+                <Image
+                    src={"/home/grid/collect-2.jpg"}
+                    alt={"abc"}
+                    width={1000}
+                    height={1000}
+                    className="h-full w-auto object-cover"
+                />
+            </div>
+        </main>
+    );
 }
