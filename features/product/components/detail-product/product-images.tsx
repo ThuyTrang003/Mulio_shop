@@ -23,11 +23,11 @@ export function ProductImages({ images }: ProductImagesProps) {
             {/* Thumbnails Carousel */}
             <div className="relative py-6">
                 <Carousel orientation="vertical">
-                    <CarouselContent className="mt-1 lg:h-[500px]">
+                    <CarouselContent className="mt-1 h-[500px]">
                         {images.map((src, index) => (
                             <CarouselItem
                                 key={index}
-                                className="pt-1 lg:basis-1/4"
+                                className="basis-1/4 pt-1"
                             >
                                 <button
                                     onClick={() => setSelectedImage(index)}

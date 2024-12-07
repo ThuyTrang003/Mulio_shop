@@ -146,7 +146,7 @@ export function WishListItem({ product }: WishListItemProps) {
                     className="w-full sm:w-auto"
                 >
                     <ShoppingCart className="mr-2 h-4 w-4" />
-                    Add to Cart
+                    Thêm vào giỏ hàng
                 </Button>
                 <Button
                     variant="ghost"

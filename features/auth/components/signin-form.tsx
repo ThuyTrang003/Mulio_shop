@@ -41,11 +41,11 @@ export function SigninForm() {
                 setToken(data.token);
                 setCartId(data.cartId);
                 setUserId(data.userId);
-                toast("Signin successfully!");
-                router.replace("/");
+                toast("Đăng nhập thành công!");
+                router.replace("/home");
             },
             onError: () => {
-                toast.error("Signin failed!");
+                toast.error("Đăng nhập thất bại!");
             },
         });
     });

@@ -1,15 +1,18 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface StarRatingProps {
+    defaultValue?: number;
     onChange?: (rating: number) => void;
 }
-export default function StarRating({ onChange }: StarRatingProps) {
+export default function StarRating({defaultValue = 0, onChange }: StarRatingProps) {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
-
+    useEffect(() => {
+        setRating(defaultValue);
+    }, [defaultValue]);
     const handleMouseEnter = (starIndex: number) => {
         setHover(starIndex);
     };

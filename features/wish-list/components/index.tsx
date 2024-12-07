@@ -10,8 +10,14 @@ export function WishList() {
     return (
         <div className="space-y-4">
             {wishListData &&
-                wishListData.map((product: WishListType) => (
-                    <WishListItem key={product.skuBase} product={product} />
+                (wishListData.length === 0 ? (
+                    <div className="text-center text-muted-foreground">
+                        Danh mục yêu thích trống!
+                    </div>
+                ) : (
+                    wishListData.map((product: WishListType) => (
+                        <WishListItem key={product.skuBase} product={product} />
+                    ))
                 ))}
         </div>
     );

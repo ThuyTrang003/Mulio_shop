@@ -1,11 +1,21 @@
-// ShopPage.tsx
-import React from "react";
-import PageHeader from "@/features/main/components/page-header";
+"use client";
+
+import { redirect } from "next/navigation";
+import React, { useEffect } from "react";
+
+import { useAuthStore } from "@/stores/auth";
 
 import { Cart } from "@/features/cart/components/cart-page";
-// import PageHeader from "@/features/layout/page-header";
+import PageHeader from "@/features/main/components/page-header";
 
-export default function CartPage (){
+export default function CartPage() {
+    const { token } = useAuthStore();
+    useEffect(() => {
+        if (token)
+            if (token.accessToken === "") {
+                redirect("/signin");
+            }
+    }, [token]);
     return (
         <>
             <PageHeader
@@ -21,4 +31,4 @@ export default function CartPage (){
             </div>
         </>
     );
-};
+}

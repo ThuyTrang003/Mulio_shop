@@ -17,12 +17,11 @@ export interface Product {
     amount: number;
     status: string;
     productType: string;
-    images: string;
+    images: string[];
     createdAt: string; // Sử dụng string vì Date được backend trả về ở dạng ISO
     updatedAt?: string | null;
     deletedAt?: string | null;
 }
-
 
 interface ProductSectionProps {
     title: string;
@@ -33,14 +32,12 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
     const [visibleProducts, setVisibleProducts] = useState(8);
 
     const handleShowMore = () => {
-        setVisibleProducts(prevVisible => prevVisible + 8); // Mỗi lần bấm Xem thêm sẽ hiển thị thêm 8 sản phẩm
+        setVisibleProducts((prevVisible) => prevVisible + 8); // Mỗi lần bấm Xem thêm sẽ hiển thị thêm 8 sản phẩm
     };
-
-    console.log(products);
 
     return (
         <section className="mx-14 my-10 flex flex-col items-center justify-center gap-5">
-            <h2 className=" text-2xl font-bold text-black">{title}</h2>
+            <h2 className="text-2xl font-bold text-black">{title}</h2>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4">
                 {products.slice(0, visibleProducts).map((product) => (
                     <ProductPreview
@@ -54,7 +51,6 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
                         color={product.color}
                         skuBase={product.skuBase}
                     />
-                    
                 ))}
             </div>
             {visibleProducts < products.length && (
@@ -65,6 +61,5 @@ const ProductSection: React.FC<ProductSectionProps> = ({ title, products }) => {
         </section>
     );
 };
-
 
 export default ProductSection;

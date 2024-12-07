@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -8,6 +9,7 @@ import { useAddProductToCart } from "@/hooks/cart-hook/use-cart";
 import { useGetProductByColorSize } from "@/hooks/product-hook/useProduct";
 import { useAddProductToWishList } from "@/hooks/wish-list-hook/useWishList";
 
+import { useAuthStore } from "@/stores/auth";
 import useCartStore from "@/stores/cart-store";
 
 import { moneyFormatter } from "@/utils/money-formatter";
@@ -32,6 +34,8 @@ interface ProductInforProps {
     };
 }
 export function ProductInfor({ productData }: ProductInforProps) {
+    const router = useRouter();
+    const { token } = useAuthStore();
     const [quantity, setQuantity] = useState(1);
     const [selectedSize, setSelectedSize] = useState(productData.sizes[0]);
     const [selectedColor, setSelectedColor] = useState(productData.colors[0]);
@@ -47,35 +51,45 @@ export function ProductInfor({ productData }: ProductInforProps) {
 
     const { mutate: addToWishList } = useAddProductToWishList();
     const handleAddToWishList = () => {
-        addToWishList(productData.skuBase, {
-            onSuccess: () => {
-                toast(
-                    `Item ${productData.productName} added to wish list successfully`,
-                );
-            },
-        });
-    };
-    const handleAddProductToCart = () => {
-        addProductToCart(
-            {
-                cartId: cartId,
-                productId: productByColorSize.productId,
-                amount: quantity,
-            },
-            {
+        if (token.accessToken === "") {
+            toast.error("Vui lòng đăng nhập!");
+            router.push("/signin");
+        } else {
+            addToWishList(productData.skuBase, {
                 onSuccess: () => {
                     toast(
-                        `Item ${productByColorSize.productName} added to cart successfully`,
+                        `${productData.productName} đã được thêm vào yêu thích`,
                     );
-                    queryClient.invalidateQueries({
-                        queryKey: ["getCart"],
-                    });
                 },
-                onError: () => {
-                    toast.error("Add item failed!");
+            });
+        }
+    };
+    const handleAddProductToCart = () => {
+        if (token.accessToken === "") {
+            toast.error("Vui lòng đăng nhập!");
+            router.push("/signin");
+        } else {
+            addProductToCart(
+                {
+                    cartId: cartId,
+                    productId: productByColorSize.productId,
+                    amount: quantity,
                 },
-            },
-        );
+                {
+                    onSuccess: () => {
+                        toast(
+                            `${productByColorSize.productName} đã được thêm vào giỏ hàng`,
+                        );
+                        queryClient.invalidateQueries({
+                            queryKey: ["getCart"],
+                        });
+                    },
+                    onError: () => {
+                        toast.error("Thất bại!");
+                    },
+                },
+            );
+        }
     };
     return (
         <div className="space-y-6">
@@ -120,7 +134,7 @@ export function ProductInfor({ productData }: ProductInforProps) {
                 {productData.colors.length > 0 && (
                     <div>
                         <label className="mb-2 block text-sm font-medium">
-                            Color
+                            Màu sắc
                         </label>
                         <div className="flex gap-2">
                             {productData.colors.map((color) => (
