@@ -48,10 +48,10 @@ export function SignupForm() {
         <form onSubmit={onSubmit}>
             <CardContent className="flex flex-col">
                 <div className="space-y-1">
-                    <Label htmlFor="username">Name</Label>
+                    <Label htmlFor="username">Họ và tên</Label>
                     <Input
                         {...register("username")}
-                        placeholder="Enter your full name"
+                        placeholder="Nhập họ và tên"
                         disabled={isPending}
                     />
                 </div>
@@ -63,7 +63,7 @@ export function SignupForm() {
                     <Label htmlFor="email">Email</Label>
                     <Input
                         {...register("email")}
-                        placeholder="Enter your email address"
+                        placeholder="Nhập địa chỉ email"
                         disabled={isPending}
                     />
                 </div>
@@ -72,10 +72,10 @@ export function SignupForm() {
                 )}
 
                 <div className="space-y-1">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Mật khẩu</Label>
                     <IconInput
                         {...register("password")}
-                        placeholder="Enter your password"
+                        placeholder="Nhập mật khẩu"
                         className="pr-10"
                         type={showPassword ? "text" : "password"}
                         disabled={isPending}
@@ -103,10 +103,10 @@ export function SignupForm() {
                 )}
 
                 <div className="space-y-1">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
                     <IconInput
                         {...register("confirmPassword")}
-                        placeholder="Enter your password"
+                        placeholder="Nhập lại mật khẩu"
                         className="pr-10"
                         type={showconfirmPass ? "text" : "password"}
                         disabled={isPending}
@@ -135,7 +135,7 @@ export function SignupForm() {
             </CardContent>
             <CardContent className="flex flex-col space-y-4">
                 <Button disabled={isPending} variant="secondary">
-                    Sign up
+                    Đăng ký
                 </Button>
             </CardContent>
         </form>
