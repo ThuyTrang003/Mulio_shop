@@ -21,10 +21,10 @@ export default function WishListPage() {
         <>
             <PageHeader
                 backgroundImage="/banner_shop.png"
-                title="Favorites"
+                title="Yêu thích"
                 breadcrumbItems={[
-                    { label: "Home", href: "/home" },
-                    { label: "Favorites", href: "/favorites" },
+                    { label: "Trang chủ", href: "/home" },
+                    { label: "Yêu thích", href: "/favorites" },
                 ]}
             />
             <div className="px-20 py-10">

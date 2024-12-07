@@ -43,8 +43,16 @@ export default function ChangePasswordForm() {
                     newPassword: "",
                     confirmPassword: "",
                 });
-            } catch (error) {
-                toast.error("Đã xảy ra lỗi khi cập nhật mật khẩu."); // Error notification
+            } catch (error: any) {
+                // Xử lý lỗi trả về từ API
+                if (error.response?.data?.message === "Old password is incorrect" || error.response?.data?.message === "Validation failed") {
+                    toast.error("Mật khẩu hiện tại không đúng."); // Hiển thị thông báo lỗi
+                } else {
+                    toast.error(
+                        error.response?.data?.message ||
+                            "Đã xảy ra lỗi, vui lòng thử lại sau."
+                    ); // Hiển thị lỗi khác nếu có
+                }
                 console.error("Error updating password:", error);
             }
         } else {

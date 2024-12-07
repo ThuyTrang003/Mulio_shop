@@ -29,7 +29,7 @@ const ShopPage: React.FC = () => {
     // State cho bộ lọc
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
-
+    const [selectedPriceRange, setSelectedPriceRange] = useState<string>("");
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -85,7 +85,20 @@ const ShopPage: React.FC = () => {
         const isClothing = ["Áo", "Quần"].includes(product.productType);
         const matchSize = isClothing ? product.size === "S" : true;
 
-        return matchType && matchColor && matchSize;
+        // return matchType && matchColor && matchSize;
+        // Lọc theo giá
+        let matchPrice = true;
+        if (selectedPriceRange) {
+            if (selectedPriceRange === ">250000") {
+                matchPrice = product.price <= 250000;
+            } else if (selectedPriceRange === "250000-350000") {
+                matchPrice = product.price >= 250000 && product.price <= 350000;
+            } else if (selectedPriceRange === "350000-450000") {
+                matchPrice = product.price >= 350000 && product.price <= 450000;
+            }
+        }
+
+        return matchType && matchColor && matchSize && matchPrice;
     });
 
     // Hàm xử lý chọn loại sản phẩm
@@ -105,7 +118,10 @@ const ShopPage: React.FC = () => {
                 : [...prev, color],
         );
     };
-
+    // Hàm xử lý chọn khoảng giá
+    const handlePriceRangeChange = (range: string) => {
+        setSelectedPriceRange(range);
+    };
     if (loading) {
         return <p>Đang tải dữ liệu...</p>;
     }
@@ -226,6 +242,54 @@ const ShopPage: React.FC = () => {
                                         border: "1px solid #ccc",
                                     }}
                                 ></span>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                <hr
+                    style={{
+                        border: "none",
+                        borderTop: "2px dashed #ccc",
+                        margin: "30px 0",
+                    }}
+                />
+                <h2 className="mb-4 text-2xl font-bold text-[#f15e2c]">
+                    Khoảng giá
+                </h2>
+                <ul style={{ listStyle: "none", padding: "0" }}>
+                    {[
+                        { label: "> 250.000", value: ">250000" },
+                        { label: "250.000 - 350.000", value: "250000-350000" },
+                        { label: "350.000 - 450.000", value: "350000-450000" },
+                    ].map(({ label, value }) => (
+                        <li key={value}>
+                            <button
+                                onClick={() => handlePriceRangeChange(value)}
+                                className={
+                                    selectedPriceRange === value
+                                        ? "filter-btn selected"
+                                        : "filter-btn"
+                                }
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    background:
+                                        selectedPriceRange === value
+                                            ? "#E2E1DF"
+                                            : "transparent",
+                                    color:
+                                        selectedPriceRange === value
+                                            ? "#000"
+                                            : "#000",
+                                    textAlign: "left",
+                                    width: "100%",
+                                    padding: "5px 20px",
+                                    marginBottom: "5px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {label}
                             </button>
                         </li>
                     ))}

@@ -14,7 +14,8 @@ import { CartItem } from "@/features/cart/types/cart-item-type";
 import PageHeader from "@/features/layout/page-header";
 
 import Select from "@/components/select";
-
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 interface Location {
     code: number;
     name: string;
@@ -29,6 +30,7 @@ interface Customer {
 }
 
 export default function CheckoutPage() {
+    const router = useRouter(); 
     const { token } = useAuthStore();
     const accessToken = token.accessToken;
     const [provinces, setProvinces] = useState<Location[]>([]);
@@ -136,7 +138,8 @@ export default function CheckoutPage() {
 
     const handleCheckout = async () => {
         if (!cartData?.cartId) {
-            console.error("Cart ID is missing.");
+            // console.error("Cart ID is missing.");
+            toast.error("Không tìm thấy giỏ hàng!");
             return;
         }
 
@@ -172,16 +175,22 @@ export default function CheckoutPage() {
 
             if (response.ok) {
                 const data = await response.json();
+                toast.success("Thanh toán thành công!");
                 console.log("Checkout success:", data);
-                alert("Thanh toán thành công!");
+                // alert("Thanh toán thành công!");
+                router.push("/shop");
             } else {
                 const errorData = await response.json();
+                toast.error(
+                    errorData?.message || "Thanh toán thất bại. Vui lòng thử lại!"
+                );
                 console.error("Checkout failed:", errorData);
-                alert("Thanh toán thất bại. Vui lòng thử lại!");
+                // alert("Thanh toán thất bại. Vui lòng thử lại!");
             }
         } catch (error) {
+            toast.error("Có lỗi xảy ra. Vui lòng thử lại!");
             console.error("Error during checkout:", error);
-            alert("Có lỗi xảy ra. Vui lòng thử lại!");
+            // alert("Có lỗi xảy ra. Vui lòng thử lại!");
         }
     };
 
@@ -189,10 +198,10 @@ export default function CheckoutPage() {
         <>
             <PageHeader
                 backgroundImage="/banner_shop.png"
-                title="Checkout"
+                title="Thanh toán"
                 breadcrumbItems={[
-                    { label: "Home", href: "/home" },
-                    { label: "Checkout", href: "/checkout" },
+                    { label: "Trang chủ", href: "/home" },
+                    { label: "Thanh toán", href: "/checkout" },
                 ]}
             />
             <div className="container mx-auto px-4 py-8">
