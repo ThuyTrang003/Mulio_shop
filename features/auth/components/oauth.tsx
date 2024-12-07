@@ -10,7 +10,7 @@ export function OauthButton() {
         <CardContent className="items-center">
             <div className="flex w-full items-center">
                 <div className="h-0.5 grow bg-gray-400"></div>
-                <span className="px-4 text-gray-500">Or login with</span>
+                <span className="px-4 text-gray-500">Hoặc đăng nhập với</span>
                 <div className="h-0.5 grow bg-gray-400"></div>
             </div>
             <div className="flex justify-center space-x-4">

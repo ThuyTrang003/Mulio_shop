@@ -57,7 +57,7 @@ export function SigninForm() {
                     <Label htmlFor="email">Email</Label>
                     <Input
                         {...register("email")}
-                        placeholder="Enter your mail address"
+                        placeholder="Nhập địa chỉ email"
                         disabled={isPending}
                     />
                 </div>
@@ -66,10 +66,10 @@ export function SigninForm() {
                 )}
 
                 <div className="space-y-1">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">Mật khẩu</Label>
                     <IconInput
                         {...register("password")}
-                        placeholder="Enter your password"
+                        placeholder="Nhập mật khẩu"
                         className="pr-10"
                         type={showPassword ? "text" : "password"}
                         disabled={isPending}
@@ -97,12 +97,12 @@ export function SigninForm() {
                 )}
 
                 <CardDescription className="flex cursor-pointer justify-end text-black hover:underline">
-                    Forgot password ?
+                    Quên mật khẩu?
                 </CardDescription>
             </CardContent>
             <CardContent className="flex flex-col space-y-4">
                 <Button variant="secondary" disabled={isPending}>
-                    Sign in
+                    Đăng nhập
                 </Button>
             </CardContent>
         </form>
